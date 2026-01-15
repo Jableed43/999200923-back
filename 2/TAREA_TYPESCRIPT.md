@@ -27,7 +27,7 @@ Crea un archivo llamado `ejercicio1.ts` y realiza lo siguiente:
 Mi nombre es: Juan
 Mi edad es: 25
 Soy estudiante: true
-Mi nota promedio es: 8.5
+Mi nota es: 8.5
 Calificaciones: [7, 8, 9]
 Materias: ["Matemáticas", "Programación", "Base de Datos"]
 ```
@@ -93,35 +93,6 @@ Crea un archivo llamado `ejercicio4.ts` y realiza lo siguiente:
      - `disponible`: boolean
    
    - **Constructor:** que inicialice todas las propiedades
-   
-   - **Métodos:**
-     - `prestar()`: void
-       - Cambia `disponible` a `false`
-       - Muestra: `"El libro [titulo] ha sido prestado"`
-     
-     - `devolver()`: void
-       - Cambia `disponible` a `true`
-       - Muestra: `"El libro [titulo] ha sido devuelto"`
-     
-     - `obtenerInfo()`: string
-       - Retorna: `"[titulo] - [autor] ([anio]) - Disponible: [disponible]"`
-
-2. Crea al menos 2 instancias de la clase `Libro`
-
-3. Prueba todos los métodos:
-   - Presta un libro
-   - Devuelve un libro
-   - Muestra la información de ambos libros
-
-**Ejemplo de salida esperada:**
-```
-El libro El Quijote ha sido prestado
-El libro Cien años de soledad ha sido devuelto
-El Quijote - Miguel de Cervantes (1605) - Disponible: false
-Cien años de soledad - Gabriel García Márquez (1967) - Disponible: true
-```
-
----
 
 ## 📁 Estructura de Archivos
 
