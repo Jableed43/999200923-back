@@ -27,7 +27,7 @@ Crea un archivo llamado `ejercicio1.ts` y realiza lo siguiente:
 Mi nombre es: Juan
 Mi edad es: 25
 Soy estudiante: true
-Mi nota es: 8.5
+Mi nota promedio es: 8.5
 Calificaciones: [7, 8, 9]
 Materias: ["Matemáticas", "Programación", "Base de Datos"]
 ```
