@@ -17,7 +17,14 @@
 USE escuela;
 
 -- Tu consulta aquí
+select materias.nombre, materias.codigo, count(inscripciones.idEstudiantes) as cantidad_estudiantes
+from materias 
+inner join inscripciones on materias.idMaterias = inscripciones.idMaterias
+group by materias.idMaterias, materias.nombre, materias.codigo
+having count(inscripciones.idEstudiantes) > 5
+order by cantidad_estudiantes DESC
 -- Pista: Agrupa por materia y cuenta estudiantes, luego filtra con HAVING
+
 ```
 
 **Resultado esperado**: Materias con nombre, código y cantidad de estudiantes.
@@ -29,8 +36,17 @@ USE escuela;
 
 ```sql
 -- Tu consulta aquí
+select estudiantes.nombre, estudiantes.apellido, ROUND(AVG(inscripciones.nota), 2) as promedio_notas
+from estudiantes
+inner join inscripciones on estudiantes.idEstudiantes = inscripciones.idEstudiantes
+where inscripciones.nota is not null
+group by estudiantes.idEstudiantes, estudiantes.nombre, estudiantes.apellido
+having promedio_notas > 8
+order by promedio_notas DESC
 -- Pista: Agrupa por estudiante, calcula promedio, filtra con HAVING
 ```
+
+
 
 **Resultado esperado**: Estudiantes con nombre, apellido y promedio.
 
@@ -43,6 +59,13 @@ USE escuela;
 
 ```sql
 -- Tu consulta aquí
+select materias.nombre, materias.codigo, count(inscripciones.idEstudiantes) as cantidad_estudiantes, ROUND(AVG(inscripciones.nota), 2) as promedio_notas
+from materias
+inner join inscripciones on materias.idMaterias = inscripciones.idMaterias
+where inscripciones.nota is not null
+group by materias.idMaterias, materias.nombre, materias.codigo
+having count(inscripciones.idEstudiantes) > 5 AND AVG(inscripciones.nota) > 7
+order by promedio_notas DESC
 -- Pista: Usa HAVING con AND para múltiples condiciones
 ```
 
@@ -145,6 +168,17 @@ USE escuela;
 
 ```sql
 -- Tu consulta aquí
+select estudiantes.nombre, estudiantes.apellido, ROUND(AVG(inscripciones.nota),2) AS promedio_personal
+from estudiantes
+inner join inscripciones on estudiantes.idEstudiantes = inscripciones.idEstudiantes
+where inscripciones.nota is not null
+group by estudiantes.idEstudiantes
+having AVG(inscripciones.nota) > (
+	select AVG(inscripciones.nota)
+    from inscripciones
+    where inscripciones.nota is not null
+)
+order by promedio_personal DESC
 -- Pista: Usa una subconsulta para calcular el promedio general
 ```
 
@@ -157,6 +191,15 @@ USE escuela;
 
 ```sql
 -- Tu consulta aquí
+select distinct estudiantes.nombre, estudiantes.apellido
+from estudiantes
+inner join inscripciones on estudiantes.idEstudiantes = inscripciones.idEstudiantes
+where inscripciones.idMaterias IN (
+	select materias.idMaterias
+    from materias
+    where materias.codigo LIKE "%PROG%"
+)
+order by estudiantes.apellido
 -- Pista: Usa IN con una subconsulta que encuentre IDs de materias PROG
 ```
 
@@ -174,6 +217,16 @@ USE escuela;
 
 ```sql
 -- Tu consulta aquí
+select estudiantes.apellido, estudiantes.nombre, materias.nombre as nombre_materia, inscripciones.nota,
+	CASE
+		when inscripciones.nota >= 7 then "Aprobado"
+		when inscripciones.nota is not null then "Desaprobado"
+		else "En curso"
+	END AS estado
+from estudiantes
+inner join inscripciones on estudiantes.idEstudiantes = inscripciones.idEstudiantes
+inner join materias on inscripciones.idMaterias = materias.idMaterias
+order by estudiantes.apellido, materias.nombre
 -- Pista: Usa CASE WHEN para clasificar
 ```
 
@@ -203,6 +256,11 @@ USE escuela;
 
 ```sql
 -- Tu consulta aquí
+select estudiantes.nombre, estudiantes.apellido, estudiantes.email, "Estudiante" as tipo
+from estudiantes 
+UNION
+select docentes.nombre, docentes.apellido, docentes.email, "Docente" as tipo
+from docentes
 -- Pista: Primera consulta estudiantes, segunda docentes, luego UNION
 ```
 
