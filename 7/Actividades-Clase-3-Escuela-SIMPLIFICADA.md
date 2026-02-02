@@ -1,14 +1,14 @@
 # Actividades Prácticas Simplificadas - Clase 3: Consultas Avanzadas
 
 **Base de datos**: `escuela`  
-**Duración total**: 60-90 minutos  
+**Duración total**: 90-120 minutos  
 **Versión**: Simplificada (solo ejercicios esenciales)
 
-> 💡 **Nota**: Esta es una versión simplificada con ejercicios básicos.
+> 🎯 **Enfoque Principal**: Esta clase se centra principalmente en HAVING, por lo que la mayoría de ejercicios practican este concepto.
 
 ---
 
-## 🎯 Actividad 1: HAVING Básico (20 min)
+## 🎯 Actividad 1: HAVING Básico (45 min)
 
 ### Ejercicio 1.1: Materias Populares
 **Problema**: Encontrar materias con más de 5 estudiantes inscritos.
@@ -36,7 +36,109 @@ USE escuela;
 
 ---
 
-## 🎯 Actividad 2: Subconsultas Básicas (20 min)
+### Ejercicio 1.3: Materias con Buen Rendimiento
+**Problema**: Encontrar materias que cumplan AMBAS condiciones:
+- Tengan más de 5 estudiantes inscritos
+- El promedio de notas sea mayor a 7
+
+```sql
+-- Tu consulta aquí
+-- Pista: Usa HAVING con AND para múltiples condiciones
+```
+
+**Resultado esperado**: Materias con nombre, cantidad de estudiantes y promedio.
+
+---
+
+### Ejercicio 1.4: Estudiantes con Múltiples Materias
+**Problema**: Encontrar estudiantes que tengan al menos 3 materias con nota.
+
+```sql
+-- Tu consulta aquí
+-- Pista: Agrupa por estudiante, cuenta materias con nota, filtra con HAVING
+```
+
+**Resultado esperado**: Estudiantes con nombre, apellido y cantidad de materias.
+
+---
+
+### Ejercicio 1.5: Materias con Promedio Bajo
+**Problema**: Encontrar materias donde el promedio de notas sea menor a 6 Y haya al menos 3 estudiantes.
+
+```sql
+-- Tu consulta aquí
+-- Pista: Usa HAVING con AND para ambas condiciones
+```
+
+**Resultado esperado**: Materias con nombre, cantidad de estudiantes y promedio.
+
+---
+
+### Ejercicio 1.6: Estudiantes Excelentes con Muchas Materias
+**Problema**: Encontrar estudiantes que cumplan AMBAS condiciones:
+- Promedio mayor a 8.5
+- Al menos 3 materias con nota
+
+```sql
+-- Tu consulta aquí
+-- Pista: Combina AVG y COUNT en HAVING con AND
+```
+
+**Resultado esperado**: Estudiantes con nombre, apellido, promedio y cantidad de materias.
+
+---
+
+### Ejercicio 1.7: Materias Populares o con Buen Promedio
+**Problema**: Encontrar materias que cumplan AL MENOS UNA de estas condiciones:
+- Más de 8 estudiantes inscritos, O
+- Promedio mayor a 8
+
+```sql
+-- Tu consulta aquí
+-- Pista: Usa HAVING con OR para condiciones alternativas
+```
+
+**Resultado esperado**: Materias con nombre, cantidad de estudiantes y promedio.
+
+---
+
+### Ejercicio 1.8: Combinando WHERE y HAVING
+**Problema**: Encontrar materias con más de 5 estudiantes que tengan notas (excluir NULLs) y promedio mayor a 7.
+
+```sql
+-- Tu consulta aquí
+-- Pista: Usa WHERE para filtrar notas no nulas ANTES de agrupar, luego HAVING para filtrar grupos
+```
+
+**Resultado esperado**: Materias con nombre, cantidad de estudiantes y promedio.
+
+---
+
+### Ejercicio 1.9: Usando Alias en HAVING
+**Problema**: Encontrar estudiantes con promedio mayor a 8, usando el alias del promedio en HAVING.
+
+```sql
+-- Tu consulta aquí
+-- Pista: Define un alias en SELECT (ej: promedio_notas) y úsalo en HAVING
+```
+
+**Resultado esperado**: Estudiantes con nombre, apellido y promedio.
+
+---
+
+### Ejercicio 1.10: Docentes con Muchas Materias
+**Problema**: Encontrar docentes que tengan más de 2 materias asignadas.
+
+```sql
+-- Tu consulta aquí
+-- Pista: Agrupa por docente y cuenta materias
+```
+
+**Resultado esperado**: Docentes con nombre, apellido, especialidad y cantidad de materias.
+
+---
+
+## 🎯 Actividad 2: Subconsultas Básicas (15 min)
 
 ### Ejercicio 2.1: Estudiantes por Encima del Promedio
 **Problema**: Encontrar estudiantes cuyo promedio sea mayor al promedio general.
@@ -62,7 +164,7 @@ USE escuela;
 
 ---
 
-## 🎯 Actividad 3: CASE WHEN Básico (15 min)
+## 🎯 Actividad 3: CASE WHEN Básico (10 min)
 
 ### Ejercicio 3.1: Clasificar Notas
 **Problema**: Clasificar inscripciones según su nota:
@@ -94,7 +196,7 @@ USE escuela;
 
 ---
 
-## 🎯 Actividad 4: UNION Básico (10 min)
+## 🎯 Actividad 4: UNION Básico (5 min)
 
 ### Ejercicio 4.1: Lista Unificada
 **Problema**: Crear una lista que combine estudiantes y docentes.
@@ -108,7 +210,7 @@ USE escuela;
 
 ---
 
-## 🎯 Actividad 5: Funciones de Fecha y Texto (15 min)
+## 🎯 Actividad 5: Funciones de Fecha y Texto (10 min)
 
 ### Ejercicio 5.1: Nombre Completo
 **Problema**: Mostrar estudiantes con nombre completo formateado.
@@ -147,10 +249,15 @@ Antes de considerar completados los ejercicios, verifica:
 
 ## 💡 Pistas Rápidas
 
-### Para HAVING:
-- Siempre va después de GROUP BY
-- Puedes usar COUNT, AVG, SUM en HAVING
-- No puedes usar funciones de agregación en WHERE
+### Para HAVING (Concepto Principal):
+- ✅ Siempre va después de GROUP BY
+- ✅ Puedes usar COUNT, AVG, SUM, MIN, MAX en HAVING
+- ✅ Puedes usar alias definidos en SELECT
+- ✅ Puedes combinar condiciones con AND y OR
+- ✅ Puedes usar múltiples funciones de agregación
+- ❌ No puedes usar funciones de agregación en WHERE
+- 💡 Usa WHERE para filtrar filas ANTES de agrupar (más eficiente)
+- 💡 Usa HAVING para filtrar grupos DESPUÉS de agrupar
 
 ### Para Subconsultas:
 - Se ejecutan primero
