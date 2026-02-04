@@ -142,6 +142,13 @@ db.materias.insertMany([
 - Ciudad: "Mendoza"
 - Activo: true
 
+db.estudiantes.insertOne({ nombre: "Roberto",
+apellido: "Pérez",
+email: "roberto.perez@example.com",
+edad: 24,
+ciudad: "Mendoza",
+activo: true })
+
 **💡 Pista**: Usa `insertOne()` para insertar un solo documento.
 
 ---
@@ -152,6 +159,11 @@ db.materias.insertMany([
 - Código: "ING501"
 - Créditos: 4
 - Docente: "Prof. Smith"
+
+db.materias.insertOne({nombre: "Inglés Técnico",
+codigo: "ING501",
+creditos: 4,
+docente: "Prof. Smith"})
 
 **💡 Pista**: Usa `insertOne()` en la colección `materias`.
 
@@ -164,6 +176,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `insertMany()` con un array de documentos.
 
+
 ---
 
 ### READ - Leer Documentos
@@ -173,6 +186,8 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `find()` sin parámetros.
 
+db.estudiantes.find()
+
 ---
 
 #### Ejercicio R2
@@ -180,6 +195,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `find()` seguido de `.pretty()`.
 
+db.estudiantes.find().pretty()
 ---
 
 #### Ejercicio R3
@@ -194,6 +210,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `findOne()` con un filtro `{ nombre: "Ana" }`.
 
+db.estudiantes.findOne({ nombre: "Ana" })
 ---
 
 #### Ejercicio R5
@@ -208,6 +225,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `countDocuments()` sin parámetros.
 
+db.estudiantes.countDocuments()
 ---
 
 #### Ejercicio R7
@@ -222,6 +240,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `find()` con un filtro `{ ciudad: "Buenos Aires" }`.
 
+db.estudiantes.find({ ciudad: "Buenos Aires" })
 ---
 
 #### Ejercicio R9
@@ -237,9 +256,9 @@ db.materias.insertMany([
 **Consigna**: Actualizar la edad del estudiante llamado "Ana" a 23 años.
 
 **💡 Pista**: Usa `updateOne()` con:
-- Filtro: `{ nombre: "Ana" }`
+- Filtro: `{ email: 'ana.martinez@example.com' }`
 - Operador: `$set` para establecer el nuevo valor
-
+  db.estudiantes.updateOne( { email: 'ana.martinez@example.com' }, { $set: {edad: 23} } )
 ---
 
 #### Ejercicio U2
@@ -257,7 +276,7 @@ db.materias.insertMany([
 ---
 
 #### Ejercicio U4
-**Consigna**: Agregar un campo nuevo llamado "telefono" con valor "1234567890" al estudiante llamado "María".
+**Consigna**: Agregar un campo nuevo llamado "telefono" con valor "1234567890" al estudiante cuyo email es 'maria.gonzalez@example.com'.
 
 **💡 Pista**: Usa `updateOne()` con `$set` para agregar un campo nuevo.
 
@@ -288,6 +307,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa el operador `$gt` (greater than) dentro del filtro: `{ edad: { $gt: 22 } }`.
 
+db.estudiantes.find({ edad: { $gt: 22 } })
 ---
 
 #### Ejercicio R11
