@@ -181,6 +181,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `$and` con un array de condiciones: `$and: [{ activo: true }, { edad: { $gt: 22 } }]`
 
+db.estudiantes.find({ $and: [{ activo: true }, { edad: { $gt: 22 } }] })
 ---
 
 ### Ejercicio A2: $and Implícito
@@ -188,6 +189,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Simplemente coloca múltiples condiciones en el mismo objeto de consulta.
 
+db.estudiantes.find({  activo: true, edad: {$gt: 22} })
 ---
 
 ### Ejercicio A3: Múltiples Condiciones con $and
@@ -202,12 +204,16 @@ db.materias.insertMany([
 
 **💡 Pista**: Aunque puedes usar `{ edad: { $gt: 20, $lt: 25 } }`, intenta usar `$and` con dos condiciones separadas en el mismo campo.
 
+ db.estudiantes.find({ $and: [ { ciudad: "Buenos Aires" }, { activo: true }, { edad: { $gte: 20, $lte: 25 } } ] })
+
 ---
 
 ### Ejercicio A5: $and Anidado con $or
 **Consigna**: Buscar estudiantes que están activos **Y** (son de "Buenos Aires" **O** tienen más de 25 años).
 
 **💡 Pista**: Usa `$and` que contiene un `$or` dentro.
+
+db.estudiantes.find({ $and: [ { activo: true }, { $or: [ { ciudad: "Buenos Aires" }, { edad: { $gt: 25 } } ] } ] })
 
 ---
 
@@ -218,12 +224,16 @@ db.materias.insertMany([
 
 **💡 Pista**: Usa `$or` con un array de dos condiciones: `$or: [{ ciudad: "Buenos Aires" }, { ciudad: "Córdoba" }]`
 
+db.estudiantes.find({ $or: [ { ciudad: "Buenos Aires" }, { ciudad: "Córdoba" } ] })
+
 ---
 
 ### Ejercicio O2: $or con Múltiples Opciones
 **Consigna**: Buscar estudiantes que viven en "Buenos Aires", "Córdoba" **O** "Rosario".
 
 **💡 Pista**: Agrega una tercera condición al array de `$or`.
+
+db.estudiantes.find({ $or: [ { ciudad: "Buenos Aires" }, { ciudad: "Córdoba" }, { ciudad: "Rosario" } ] })
 
 ---
 
@@ -239,6 +249,7 @@ db.materias.insertMany([
 
 **💡 Pista**: `$in` es más eficiente cuando todas las condiciones son sobre el mismo campo con igualdad: `{ ciudad: { $in: ["Buenos Aires", "Córdoba", "Rosario"] } }`
 
+db.estudiantes.find({ ciudad: { $in: ["Buenos Aires", "Rosario", "Córdoba"] } })
 ---
 
 ### Ejercicio O5: $or Combinado con Otras Condiciones
@@ -262,6 +273,11 @@ db.materias.insertMany([
 
 **💡 Pista**: `$nor` devuelve documentos que NO cumplen ninguna de las condiciones: `$nor: [{ ciudad: "Buenos Aires" }, { ciudad: "Córdoba" }]`
 
+db.estudiantes.find({ $nor: [{ ciudad: "Buenos Aires" }, { ciudad: "Córdoba" }] })
+
+**Version con Not In**:
+
+db.estudiantes.find({ ciudad: { $nin: [ "Buenos Aires", "Córdoba" ] } })
 ---
 
 ### Ejercicio N2: $nor con Múltiples Condiciones
@@ -276,6 +292,7 @@ db.materias.insertMany([
 
 **💡 Pista**: `$not` invierte una condición: `{ edad: { $not: { $gt: 22 } } }`
 
+db.estudiantes.find({ edad: { $not: { $gt: 22 } }})
 ---
 
 ### Ejercicio N4: $not con Regex
@@ -299,6 +316,8 @@ db.materias.insertMany([
 
 **💡 Pista**: Puedes combinar condiciones en `$match` igual que en `find()`.
 
+
+db.estudiantes.aggregate({  $match: { activo: true, edad: { $gt: 20 } } } )
 ---
 
 ### Ejercicio M3: $match con $or
@@ -306,6 +325,7 @@ db.materias.insertMany([
 
 **💡 Pista**: `$match` acepta todos los operadores lógicos que funcionan en `find()`.
 
+db.estudiantes.aggregate({  $match: { $or: [ {ciudad: "Buenos Aires"}, { ciudad: "Córdoba" } ] } } )
 ---
 
 ### Ejercicio M4: $match seguido de $count
@@ -336,6 +356,7 @@ db.materias.insertMany([
 
 **💡 Pista**: `{ telefono: { $exists: true } }`
 
+db.estudiantes.find({ telefono: { $exists: true } })
 ---
 
 ### Ejercicio E2: $exists - Campo No Existe
@@ -343,6 +364,7 @@ db.materias.insertMany([
 
 **💡 Pista**: `{ telefono: { $exists: false } }`
 
+db.estudiantes.find({ telefono: { $exists: false } })
 ---
 
 ### Ejercicio E3: $exists Combinado con Otras Condiciones
@@ -350,6 +372,7 @@ db.materias.insertMany([
 
 **💡 Pista**: Combina `$exists` con otras condiciones usando `$and` implícito.
 
+db.estudiantes.find({ activo: true, telefono: {$exists: true} })
 ---
 
 ### Ejercicio T1: $type - Verificar Tipo String
@@ -357,12 +380,16 @@ db.materias.insertMany([
 
 **💡 Pista**: `{ telefono: { $type: "string" } }`
 
+db.estudiantes.find({ telefono: {$type: "string"} })
+
+db.estudiantes.find({ telefono: {$type: "null"} })
 ---
 
 ### Ejercicio T2: $type - Verificar Tipo Number
 **Consigna**: Buscar estudiantes donde el campo "edad" es de tipo number.
 
 **💡 Pista**: `{ edad: { $type: "number" } }`
+
 
 ---
 
@@ -384,6 +411,8 @@ db.materias.insertMany([
 **Consigna**: Buscar estudiantes cuyo apellido termina con "ez" (sin distinguir mayúsculas/minúsculas) usando `$regex`.
 
 **💡 Pista**: Usa el símbolo `$` para indicar el fin del string: `{ apellido: { $regex: /ez$/i } }`
+
+db.estudiantes.find({ apellido: { $regex: /ez$/i } })
 
 ---
 
