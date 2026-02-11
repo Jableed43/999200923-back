@@ -17,7 +17,7 @@
 - [🎯 FASE 1: Pipeline Básico - $sort, $limit, $count (6 ejercicios)](#-fase-1-pipeline-básico---sort-limit-count)
 - [🎯 FASE 2: Operadores Aritméticos Básicos (8 ejercicios)](#-fase-2-operadores-aritméticos-básicos)
 - [🎯 FASE 3: Operadores Aritméticos Avanzados (8 ejercicios)](#-fase-3-operadores-aritméticos-avanzados)
-- [🎯 FASE 4: $lookup Básico (6 ejercicios)](#-fase-4-lookup-básico)
+- [🎯 FASE 4: $lookup Básico (5 ejercicios)](#-fase-4-lookup-básico)
 - [🎯 FASE 5: $lookup con Aggregate Pipelines (5 ejercicios)](#-fase-5-lookup-con-aggregate-pipelines)
 
 ### Referencias
@@ -50,9 +50,6 @@ db.estudiantes.insertMany([
     edad: 22,
     ciudad: "Buenos Aires",
     activo: true,
-    nota1: 8,
-    nota2: 7,
-    nota3: 9,
     materiasInscritas: [ObjectId("507f1f77bcf86cd799439011"), ObjectId("507f1f77bcf86cd799439012")]
   },
   {
@@ -62,9 +59,6 @@ db.estudiantes.insertMany([
     edad: 20,
     ciudad: "Córdoba",
     activo: true,
-    nota1: 6,
-    nota2: 8,
-    nota3: 7,
     materiasInscritas: [ObjectId("507f1f77bcf86cd799439011")]
   },
   {
@@ -74,9 +68,6 @@ db.estudiantes.insertMany([
     edad: 25,
     ciudad: "Buenos Aires",
     activo: false,
-    nota1: 9,
-    nota2: 9,
-    nota3: 10,
     materiasInscritas: [ObjectId("507f1f77bcf86cd799439012"), ObjectId("507f1f77bcf86cd799439013")]
   },
   {
@@ -86,9 +77,6 @@ db.estudiantes.insertMany([
     edad: 19,
     ciudad: "Rosario",
     activo: true,
-    nota1: 5,
-    nota2: 6,
-    nota3: 7,
     materiasInscritas: []
   },
   {
@@ -98,9 +86,6 @@ db.estudiantes.insertMany([
     edad: 23,
     ciudad: "Buenos Aires",
     activo: true,
-    nota1: 10,
-    nota2: 9,
-    nota3: 8,
     materiasInscritas: [ObjectId("507f1f77bcf86cd799439011"), ObjectId("507f1f77bcf86cd799439012"), ObjectId("507f1f77bcf86cd799439013")]
   }
 ]);
@@ -111,19 +96,22 @@ db.materias.insertMany([
     _id: ObjectId("507f1f77bcf86cd799439011"),
     nombre: "Programación",
     creditos: 6,
-    activa: true
+    activa: true,
+    docente: "Ing. Rodríguez"
   },
   {
     _id: ObjectId("507f1f77bcf86cd799439012"),
     nombre: "Base de Datos",
     creditos: 4,
-    activa: true
+    activa: true,
+    docente: "Ing. Martínez"
   },
   {
     _id: ObjectId("507f1f77bcf86cd799439013"),
     nombre: "Algoritmos",
     creditos: 5,
-    activa: true
+    activa: true,
+    docente: "Ing. López"
   }
 ]);
 
@@ -289,8 +277,8 @@ Usa `$sort` y `$limit` para obtener los 5 exámenes con mejor nota.
 ### Ejercicio A1: Calcular edad en 10 años
 Usa `$add` para calcular la edad que tendrán los estudiantes en 10 años. Muestra nombre, edad actual y edad futura.
 
-### Ejercicio A2: Calcular nota final ponderada
-Usa `$add` para calcular la nota final de un examen sumando la nota base y un bono de puntos adicionales. Considera que cada examen tiene una nota base y un campo `bono` (agrega un campo bono a algunos exámenes como ejemplo).
+### Ejercicio A2: Calcular nota final con bono
+Usa `$add` para calcular la nota final de un examen sumando la nota base y un bono fijo de 2 puntos adicionales.
 
 ### Ejercicio A3: Calcular diferencia de créditos
 Usa `$subtract` para calcular cuántos créditos le faltan a cada materia para llegar a 6 créditos (asumiendo que todas deben tener 6).
@@ -299,13 +287,13 @@ Usa `$subtract` para calcular cuántos créditos le faltan a cada materia para l
 Usa `$subtract` para calcular la diferencia entre la nota máxima y la nota obtenida en cada examen.
 
 ### Ejercicio A5: Calcular porcentaje de nota
-Usa `$multiply` para calcular el porcentaje de nota obtenida en cada examen (nota / notaMaxima × 100).
+Usa `$multiply` y `$divide` para calcular el porcentaje del promedio de notas obtenido por cada estudiante (asumiendo nota máxima de 10).
 
 ### Ejercicio A6: Calcular nota con penalización
-Usa `$multiply` para calcular la nota final aplicando una penalización del 10% por entregas tardías (agrega un campo `penalizacion` a algunas entregas como ejemplo).
+Usa `$lookup` para traer la fecha límite de la tarea, luego `$cond` y `$multiply` para aplicar una penalización del 10% solo si la entrega está atrasada (fechaEntrega > fechaLimite).
 
 ### Ejercicio A7: Calcular promedio de notas
-Usa `$divide` para calcular el promedio de las tres notas de cada estudiante.
+Usa `$group` y `$avg` para calcular el promedio de notas de las entregas de cada estudiante.
 
 ### Ejercicio A8: Calcular promedio de nota por examen
 Usa `$divide` para calcular el promedio de notas de los exámenes de cada materia (suma de notas / cantidad de exámenes). Asegúrate de manejar la división por cero.
@@ -318,13 +306,13 @@ Usa `$divide` para calcular el promedio de notas de los exámenes de cada materi
 Usa `$mod` para identificar si la edad de cada estudiante es par o impar.
 
 ### Ejercicio A10: Agrupar por rangos de edad
-Usa `$mod` y `$subtract` para agrupar estudiantes por rangos de 10 años (0-9, 10-19, 20-29, etc.).
+Usa `$floor`, `$divide` y `$multiply` para agrupar estudiantes por rangos de 10 años (0-9, 10-19, 20-29, etc.).
 
 ### Ejercicio A11: Calcular diferencia absoluta de notas
 Usa `$abs` y `$subtract` para calcular la diferencia absoluta entre la nota obtenida y la nota máxima en cada examen.
 
 ### Ejercicio A12: Calcular promedio ponderado
-Usa `$pow` y `$multiply` para calcular el promedio ponderado de exámenes. Considera que cada examen tiene un peso (campo `peso`) y calcula: suma(nota × peso) / suma(peso).
+Usa `$multiply` y `$divide` para calcular el promedio ponderado de exámenes. Considera que cada examen tiene un peso (campo `peso`) y calcula: suma(nota × peso) / suma(peso).
 
 ### Ejercicio A13: Calcular distancia euclidiana
 Usa `$sqrt`, `$pow` y `$add` para calcular la distancia desde el origen (0,0) de puntos con coordenadas x e y. Agrega campos x e y a algunos estudiantes como ejemplo.
@@ -336,7 +324,7 @@ Usa `$ceil` para redondear la nota de cada examen hacia arriba al entero más ce
 Usa `$floor` y `$divide` para calcular los años completos desde la fecha de ingreso (agrega un campo fechaIngreso a algunos estudiantes).
 
 ### Ejercicio A16: Redondear promedio a 2 decimales
-Usa `$round` para redondear el promedio de notas de cada estudiante a 2 decimales.
+Usa `$round` para redondear el promedio de notas de entregas de cada estudiante a 2 decimales.
 
 ---
 
@@ -347,9 +335,6 @@ Usa `$lookup` para traer la información de la tarea en cada entrega. Muestra es
 
 ### Ejercicio L2: Exámenes con información de materia
 Usa `$lookup` para traer la información de la materia en cada examen. Muestra estudiante, fecha y datos de la materia.
-
-### Ejercicio L3: Estudiantes con materias inscritas
-Usa `$lookup` para traer la información de las materias en las que está inscrito cada estudiante. Muestra nombre, email y materias.
 
 ### Ejercicio L4: Entregas con tareas básico
 Usa `$lookup` para traer la información de la tarea en cada entrega. Muestra todos los campos de la entrega y la información de la tarea.
@@ -365,7 +350,7 @@ Usa `$lookup` para traer la información de las materias en las que está inscri
 ## 🎯 FASE 5: $lookup con Aggregate Pipelines
 
 ### Ejercicio L7: Entregas con tareas y proyección
-Usa `$lookup` para traer tareas y luego `$project` para mostrar solo estudiante, título de la tarea y puntos máximos.
+Usa `$lookup` para traer tareas y estudiantes, luego `$project` para mostrar solo nombre y apellido del estudiante, título de la tarea y puntos máximos.
 
 ### Ejercicio L8: Exámenes con materias filtrados y ordenados
 Usa `$lookup` para traer materias, luego `$match` para filtrar exámenes con nota >= 7, y `$sort` para ordenar por nota descendente.
@@ -374,7 +359,7 @@ Usa `$lookup` para traer materias, luego `$match` para filtrar exámenes con not
 Usa `$lookup` para traer materias, luego `$group` para calcular el promedio de notas por materia, y `$project` para formatear el resultado.
 
 ### Ejercicio L10: Top 5 estudiantes con mejor promedio de entregas
-Usa `$lookup` para traer tareas, luego `$group` para calcular el promedio de notas por estudiante, `$sort` para ordenar y `$limit` para obtener top 5.
+Usa `$group` para calcular el promedio de notas por estudiante, `$sort` para ordenar y `$limit` para obtener top 5.
 
 ### Ejercicio L11: Contar estudiantes con más de 10 créditos
 Usa `$lookup` para traer materias, `$project` para calcular total de créditos, `$match` para filtrar estudiantes con más de 10 créditos, y `$count` para contar.
@@ -388,9 +373,9 @@ Usa `$lookup` para traer materias, `$project` para calcular total de créditos, 
 | FASE 1 | Pipeline Básico ($sort, $limit, $count) | 6 | Intermedio |
 | FASE 2 | Operadores Aritméticos Básicos | 8 | Intermedio |
 | FASE 3 | Operadores Aritméticos Avanzados | 8 | Avanzado |
-| FASE 4 | $lookup Básico | 6 | Intermedio-Avanzado |
+| FASE 4 | $lookup Básico | 5 | Intermedio-Avanzado |
 | FASE 5 | $lookup con Aggregate Pipelines | 5 | Avanzado |
-| **TOTAL** | | **33** | |
+| **TOTAL** | | **32** | |
 
 ---
 
