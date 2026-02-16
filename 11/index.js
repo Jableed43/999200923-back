@@ -1,11 +1,9 @@
 import express from 'express'
-import dotenv from 'dotenv'
-
-dotenv.config()
+import { PORT } from './config/config.js'
+import { testConnection } from './config/db.js'
+import estudiantesRoutes from "./routes/estudianteRoutes.js"
 
 const app = express()
-
-const PORT = process.env.PORT || 3001
 
 // Middleware
 // app.use -> configuraciones, funcionalidades que utilizamos
@@ -25,8 +23,15 @@ app.get("/", (req, res) => {
     })
 })
 
+// Rutas
+//Rutas de estudiantes
+app.use("/api/estudiantes", estudiantesRoutes)
+
 
 // Este codigo debe ir siempre al final
 app.listen(PORT, async () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`)
+
+    // Probar la conexion a la base de datos
+    await testConnection()
 })
