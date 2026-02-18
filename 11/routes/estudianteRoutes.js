@@ -1,5 +1,5 @@
 import express from "express"
-import { createEstudiante, getAllEstudiantes } from "../controllers/estudianteController.js"
+import { createEstudiante, deleteEstudiante, getAllEstudiantes, patchEstudiante } from "../controllers/estudianteController.js"
 
 const router = express.Router()
 
@@ -8,5 +8,7 @@ const router = express.Router()
 // Dos rutas pueden compartir url si tienen distinto verbo/metodo http
 router.get("/", getAllEstudiantes)
 router.post("/", createEstudiante)
+router.patch("/:id", patchEstudiante)
+router.delete("/:id", deleteEstudiante)
 
 export default router
