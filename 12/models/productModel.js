@@ -44,12 +44,16 @@ const productSchema = new mongoose.Schema({
             },
             // props toma el valor que se le fue dado al campo status
             message: props => `${props.value} nos es un estado valido`
-        }
+        },
+        default: statusEnum[0]
     },
 
     // category
     category: String,
-    highlighted: Boolean
+    highlighted: {
+        type: Boolean,
+        default: false
+    }
 
 })
 
