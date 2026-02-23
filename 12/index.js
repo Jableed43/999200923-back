@@ -3,6 +3,7 @@ import { PORT } from "./config/config.js"
 import { connectDB } from "./config/db.js"
 import productRoute from "./routes/productRoute.js"
 import categoryRoute from "./routes/categoryRoute.js"
+import userRoute from "./routes/userRoute.js"
 
 const app = express()
 
@@ -16,6 +17,7 @@ connectDB()
 // Agrupador de rutas de productos
 app.use("/api/product", productRoute)
 app.use("/api/category", categoryRoute)
+app.use("/api/user", userRoute)
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`)

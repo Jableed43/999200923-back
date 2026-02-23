@@ -56,6 +56,8 @@ const productSchema = new mongoose.Schema({
         default: false
     }
 
+}, { 
+  timestamps: true
 })
 
 // Virtual genera un campo que es calculado
