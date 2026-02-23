@@ -49,7 +49,8 @@ const productSchema = new mongoose.Schema({
     },
 
     // category
-    category: String,
+    // El ref "category" hace referencia al nombre del modelo de la categoria
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
     highlighted: {
         type: Boolean,
         default: false

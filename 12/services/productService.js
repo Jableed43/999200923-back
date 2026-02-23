@@ -21,7 +21,7 @@ export const createProductService = async (productData) => {
 
 export const getAllProductService = async () => {
     // Traer todos los productos, es igual al "select *"
-    const products = await Product.find()
+    const products = await Product.find().populate("category")
 
     return products
 }
