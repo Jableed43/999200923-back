@@ -1,16 +1,10 @@
+import { checkModelExist } from "../helpers/checkExist.js"
 import Product from "../models/productModel.js"
 
 export const createProductService = async (productData) => {
     // Deberiamos validar que el producto es unico
     const {name} = productData
-
-    const productExist = await Product.findOne({name})
-
-    if(productExist){
-        const error = new Error(`Product ${name}, already exist`)
-        error.statusCode = 400
-        throw error
-    }
+    await checkModelExist(Product, {name}, false, 400, `Product ${name}, already exist`)
 
     const newProduct = new Product(productData)
 
@@ -27,13 +21,7 @@ export const getAllProductService = async () => {
 }
 
 export const updateProductService = async (id, productData) => {
-    const productExist = await Product.findOne({ _id: id })
-    if(!productExist){
-        const error = new Error("Product not found")
-        // El cliente paso un campo y un dato para la busqueda y ese registro no se encuentra
-        error.statusCode = 404
-        throw error
-    }
+    await checkModelExist(Product, { _id: id }, true, 404, "Product not found")
 
     // findOneAndUpdate tiene 3 parametros:
     // 1. Es un identificador unico con el cual buscamos el registro
@@ -48,14 +36,7 @@ export const updateProductService = async (id, productData) => {
 }
 
 export const deleteProductService = async (id) => {
-    const productExist = await Product.findById(id)
-    // await Product.findOne({_id: id})
-    if(!productExist){
-        const error = new Error("Product not found")
-        // El cliente paso un campo y un dato para la busqueda y ese registro no se encuentra
-        error.statusCode = 404
-        throw error
-    }
+    await checkModelExist(Product, { _id: id }, true, 404, "Product not found")
 
     const response = await Product.findByIdAndDelete(id)
 

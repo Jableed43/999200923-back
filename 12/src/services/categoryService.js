@@ -1,3 +1,4 @@
+import { checkModelExist } from "../helpers/checkExist.js"
 import Category from "../models/categoryModel.js"
 import Product from "../models/productModel.js"
 
@@ -7,12 +8,13 @@ export const getAllCategoryService = async () => {
 }
 
 export const createCategoryService = async (name) => {
-    const categoryExist = await Category.findOne({name})
-    if(categoryExist){
-        const error = new Error("Category already exists")
-        error.statusCode = 400
-        throw error
-    }
+    await checkModelExist(Category, {name}, false, 400, "Category already exists")
+    // const categoryExist = await Category.findOne({name})
+    // if(categoryExist){
+    //     const error = new Error("Category already exists")
+    //     error.statusCode = 400
+    //     throw error
+    // }
     const newCategory = new Category({name})
     const response = await newCategory.save()
     return response
@@ -20,13 +22,9 @@ export const createCategoryService = async (name) => {
 
 export const updateCategoryService = async (id, name) => {
     // Primero validamos que exista, por lo tanto lo buscamos por nombre que es unico
-    const categoryExist = await Category.findOne({_id: id})
     // Si no existe lanzamos un error
-    if(!categoryExist){
-        const error = new Error("Category not found")
-        error.statusCode = 400
-        throw error
-    }
+    await checkModelExist(Category, {_id: id}, true, 400, "Category not found")
+    
     // usamos findOneAndUpdate para encontrar el registro y actualizarlo
     // este usa 3 parametros
     // 1. Es el identificador, que usamos el _id
@@ -41,14 +39,7 @@ export const updateCategoryService = async (id, name) => {
 }
 
 export const deleteCategoryService = async (id) => {
-    // Primero validamos que exista, por lo tanto lo buscamos por nombre que es unico
-    const categoryExist = await Category.findOne({_id: id})
-    // Si no existe lanzamos un error
-    if(!categoryExist){
-        const error = new Error("Category not found")
-        error.statusCode = 400
-        throw error
-    }
+    await checkModelExist(Category, {_id: id}, true, 400, "Category not found")
 
     const deletedCategory = await Category.findByIdAndDelete(id)
 
@@ -60,6 +51,6 @@ export const deleteCategoryService = async (id) => {
         { $set: {category: null} }
     )
 
-    return deletedCategory
+    return { message: "Category deleted successfully", data: deletedCategory }
 
 }

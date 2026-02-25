@@ -1,14 +1,12 @@
 import { createCategoryService, deleteCategoryService, getAllCategoryService, updateCategoryService } from "../services/categoryService.js"
+import { handleError } from "../utils/errorHandler.js"
 
 export const getAllCategories = async (req, res) => {
     try {
         const categories = await getAllCategoryService()
         res.status(200).json(categories)
     } catch (error) {
-        const statusCode = error.statusCode || 500
-        res.status(statusCode).json({
-            message: error.message || "Internal server error"
-        })
+        handleError(error, res)
     }
 }
 
@@ -18,10 +16,7 @@ export const createCategory = async (req, res) => {
         const response = await createCategoryService(name)
         res.status(201).json(response)
     } catch (error) {
-         const statusCode = error.statusCode || 500
-            res.status(statusCode).json({
-            message: error.message || "Internal server error"
-        })
+         handleError(error, res)
     }
 }
 
@@ -35,10 +30,7 @@ export const updateCategory = async (req, res) => {
         res.status(201).json(updatedCategory)
 
     } catch (error) {
-         const statusCode = error.statusCode || 500
-            res.status(statusCode).json({
-            message: error.message || "Internal server error"
-        })
+         handleError(error, res)
     }
 }
 
@@ -51,9 +43,6 @@ export const deleteCategory = async (req, res) => {
         res.status(201).json({ message: "Deleted Category", deletedCategory})
 
     } catch (error) {
-         const statusCode = error.statusCode || 500
-            res.status(statusCode).json({
-            message: error.message || "Internal server error"
-        })
+         handleError(error, res)
     }
 }

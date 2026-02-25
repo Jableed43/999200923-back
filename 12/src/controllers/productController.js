@@ -1,4 +1,5 @@
 import { createProductService, deleteProductService, getAllProductService, updateProductService } from "../services/productService.js"
+import { handleError } from "../utils/errorHandler.js"
 
 export const createProduct = async (req, res) => {
     try {
@@ -11,10 +12,7 @@ export const createProduct = async (req, res) => {
     } catch (error) {
         // Si tenemos un 400 u otro mensaje de error lo usamos
         // sino sera un 500
-        const statusCode = error.statusCode || 500
-        res.status(statusCode).json({
-            error: error.message || "Internal server error"
-        })
+        handleError(error, res)
     }
 }
 
@@ -23,10 +21,7 @@ export const getAllProduct = async (req, res) => {
         const products = await getAllProductService()
         res.status(200).json(products)
     } catch (error) {
-        const statusCode = error.statusCode || 500
-        res.status(statusCode).json({
-            error: error.message || "Internal server error"
-        })
+        handleError(error, res)
     }
 }
 
@@ -42,10 +37,7 @@ export const updateProduct = async (req, res) => {
         res.status(201).json(updatedProduct)
 
     } catch (error) {
-        const statusCode = error.statusCode || 500
-        res.status(statusCode).json({
-            error: error.message || "Internal server error"
-        })
+        handleError(error, res)
     }
 }
 
@@ -55,9 +47,6 @@ export const deleteProduct = async (req, res) => {
         const result = await deleteProductService(id)
         res.status(201).json(result)
     } catch (error) {
-        const statusCode = error.statusCode || 500
-        res.status(statusCode).json({
-            error: error.message || "Internal server error"
-        })
+        handleError(error, res)
     }
 }

@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { isGoodPassword } from '../utils/validators.js'
 
 const userSchema = mongoose.Schema({
-    nombre:{
+    name:{
         type: String,
         required: true,
         maxLength: [30, 'Por favor el nombre debe tener menos de 40 caracteres'],
@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    apellido:{
+    lastName:{
         type: String,
         required: true,
         maxLength: [30, 'Por favor el apellido debe tener menos de 40 caracteres'],
