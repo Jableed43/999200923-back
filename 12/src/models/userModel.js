@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
 import { isGoodPassword } from '../utils/validators.js'
+import bcrypt from 'bcrypt'
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true,
@@ -41,5 +42,17 @@ const userSchema = mongoose.Schema({
 
     }
 }, { timestamps: true })
+
+// Se encuentra entre la recepcion de los datos para crear un nuevo registro
+// y el guardado del nuevo registro
+userSchema.pre("save", async function () {
+    // Solo hashear la contraseña si ha sido modificada o es nueva
+    if (!this.isModified("password")) {
+        return;
+    }
+    
+    // Encriptamos la password antes de guardarla
+    this.password = bcrypt.hashSync(this.password, 10);
+});
 
 export default mongoose.model("user", userSchema) 
