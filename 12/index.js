@@ -5,6 +5,7 @@ import productRoute from "./src/routes/productRoute.js"
 import categoryRoute from "./src/routes/categoryRoute.js"
 import userRoute from "./src/routes/userRoute.js"
 import session from "express-session"
+import purchaseRoute from "./src/routes/purchaseRoute.js"
 
 const app = express()
 
@@ -25,6 +26,7 @@ connectDB()
 app.use("/api/product", productRoute)
 app.use("/api/category", categoryRoute)
 app.use("/api/user", userRoute)
+app.use("/api/purchase", purchaseRoute)
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`)
