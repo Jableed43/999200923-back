@@ -1,12 +1,41 @@
 import express from "express"
 import { PORT, SECRET } from "./src/config/config.js"
 import { connectDB } from "./src/config/db.js"
+import session from "express-session"
+import { fileURLToPath } from 'url'
+import path, { dirname } from "path"
+import methodOverride from 'method-override'
+import {engine} from 'express-handlebars'
+import {registerHelpers} from './src/helpers/helpers.js'
+import Handlebars from 'handlebars'
+import { homeView } from "./src/controllers/generalController.js"
 import productRoute from "./src/routes/productRoute.js"
 import categoryRoute from "./src/routes/categoryRoute.js"
 import userRoute from "./src/routes/userRoute.js"
-import session from "express-session"
+
+// Nombre y ubicacion de archivo estatico
+const __filename = fileURLToPath(import.meta.url)
+// Directorio del archivo estatico
+const __dirname = dirname(__filename)
 
 const app = express()
+// Sirve para modificar los metodos nativos de los forms (GET POST)
+app.use(methodOverride("_method"))
+
+// Configurar handlebars como nuestro template engine
+app.engine("handlebars", engine({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true
+    }
+}))
+// configurar handlebars como motor de vistas
+app.set("view engine", "handlebars")
+// carpeta donde guardaremos las vistas
+app.set("views", "./src/views")
+
+// registrar helpers
+registerHelpers(Handlebars)
 
 app.use(express.json())
 
@@ -18,13 +47,33 @@ app.use(session({
     saveUninitialized: false, // Evita que la sesion se guarde si no esta inicializada
 }))
 
+// Sistema de mensajes para leer errores o mensajes
+// Este middleware actúa como un preparador automático de datos para tus vistas: toma la información de la sesión (como el usuario logueado o mensajes de aviso) y la inyecta en res.locals, lo que permite que Handlebars la reconozca globalmente sin que tengas que pasarla manualmente en cada ruta. Además, al borrar (delete) los mensajes de la sesión inmediatamente después de asignarlos, implementa un sistema de mensajes flash, asegurando que las notificaciones de éxito o error se muestren una sola vez y desaparezcan al recargar la página.
+app.use((req, res, next) => {
+    res.locals.session = req.session
+    res.locals.message = req.session.message || null
+    res.locals.success = req.session.success || false
+    delete req.session.message
+    delete req.session.success
+    next()
+})
+
+app.use(express.static(path.join(__dirname, "src", "public")))
+
 connectDB()
 
-// Rutas
-// Agrupador de rutas de productos
-app.use("/api/product", productRoute)
-app.use("/api/category", categoryRoute)
-app.use("/api/user", userRoute)
+app.use("/product", productRoute)
+app.use("/category", categoryRoute)
+app.use("/user", userRoute)
+
+app.get("/", homeView)
+
+app.use((req, res) => {
+    res.status(404).render("404", {
+        title: "Pagina no encontrada",
+        message: "La pagina que buscas no existe"
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`)

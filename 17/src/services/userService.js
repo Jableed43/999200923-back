@@ -5,13 +5,9 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export const createUserService = async (userData) => {
-    const {email} = userData
-    await checkModelExist(User, {email}, false, 400, `User with email ${email} already exist`)
-
     const newUser = new User(userData)
     const savedUser = await newUser.save()
     return savedUser
-    // luego quitar contraseña
 }
 
 export const getUserService = async () => {

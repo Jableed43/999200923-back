@@ -1,0 +1,24 @@
+<h2>Lista de usuarios</h2>
+<a href="/user/create">Crear usuario</a>
+{{#if users.length}}
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{lastName}}</td>
+                    <td>{{email}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{else}}
+    <p>No hay usuarios registrados.</p>
+{{/if}}

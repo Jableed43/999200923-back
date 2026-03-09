@@ -1,25 +1,34 @@
 import { createUserService, deleteUserService, getUserService, updateUserService, validateUserService } from "../services/userService.js"
 import { handleError } from "../utils/errorHandler.js"
 
+// Vistas
+export const createUserView = async (req, res) => {
+    res.render("user/createUser", {
+        title: "Registrar usuario"
+    }    )
+}
+
+export const getAllUserView = async (req, res) => {
+    const users = await getUserService();
+    console.log(users)
+    res.render("user/getAllUser", { title: "Lista de Usuarios", users });
+};
+
+// Acciones
+
 export const createUser = async (req, res) => {
     try {
         const userData = req.body
-        const result = await createUserService(userData)
-        res.status(201).json(result)
-
+        await createUserService(userData)
+        req.session.message = "Usuario creado con exito"
+        req.session.success = true
+        res.redirect("/")
     } catch (error) {
-        handleError(error, res)
+        req.session.message = "Error al crear usuario ", error.message
     }
 }
 
-export const getUser = async (req, res) => {
-    try {
-        const users = await getUserService()
-        res.status(200).json(users)
-    } catch (error) {
-        handleError(error, res)
-    }
-}
+
 
 export const updateUser = async (req, res) => {
     try {
