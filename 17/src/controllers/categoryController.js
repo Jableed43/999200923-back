@@ -4,7 +4,7 @@ import { handleError } from "../utils/errorHandler.js"
 export const getAllCategories = async (req, res) => {
     try {
         const categories = await getAllCategoryService()
-        res.status(200).json(categories)
+        return categories
     } catch (error) {
         handleError(error, res)
     }

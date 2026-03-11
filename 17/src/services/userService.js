@@ -15,8 +15,12 @@ export const getUserService = async () => {
     return users
 }
 
+export const getUserByIdService = async (id) => {
+   const user = await User.findById(id)
+    return user
+}
+
 export const updateUserService = async (id, userData) => {
-    await checkModelExist(User, {_id: id}, true, 400, `User not found`)
 
     // En la edicion del usuario si modifican la password deberiamos encriptarla
     if(userData.password){
@@ -33,29 +37,32 @@ export const updateUserService = async (id, userData) => {
 }
 
 export const deleteUserService = async (id) => {
-    await checkModelExist(User, {_id: id}, true, 400, `User not found`)
-
-    const deletedUser = await User.findByIdAndDelete(id)
-
-    return { message: "User deleted successfully", data: deletedUser }
+    const result = await User.deleteOne({_id: id})
+    // Si se eliminó retorna true, de lo contrario retorna false
+    console.log({result})
+    if(result){
+        return true
+    } else {
+        return false
+    }
 }
 
 export const validateUserService = async (userData) => {
     const {password, email} = userData
 
     if(!(password && email)){
-        const error = new Error("There's a missing field")
-        error.statusCode = 400
-        throw error
+        return { message: "There's a missing field"}
     }
 
-    const userFound = await checkModelExist(User, {email}, true, 400, `User or password is incorrect`)
+    const userFound =  await User.findOne({email})
+
+    if(!userFound){
+        return {message: "User or password is incorrect"}
+    }
 
     //comparamos la password que nos manda el cliente y la que tenemos almacenada en la base de datos
     if(!bcrypt.compareSync(password, userFound.password)){
-        const error = new Error("User or password is incorrect")
-        error.statusCode = 400
-        throw error  
+        return {message: "User or password is incorrect"}
     }
 
     //JWT
@@ -75,6 +82,6 @@ export const validateUserService = async (userData) => {
 
     // Despues mandamos el token
 
-    return {message: "Logged In", token}
+    return {message: "Logged In", token, userId: userFound._id, userEmail: userFound.email}
     
 }

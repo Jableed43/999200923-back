@@ -7,7 +7,6 @@ export const verifyTokenMiddleware = (req, res, next) => {
         // Primero del cliente obtenemos el token (que nosotros le brindamos anteriormente)
         const authHeader = req.headers.authorization
 
-        console.log({authHeader})
         // Si no hay token o este no comienza con bearer, lanzamos error
         if(!authHeader || !authHeader.startsWith("Bearer ")){
             return res.status(400).json({message: "Access token is invalid"})
@@ -16,8 +15,6 @@ export const verifyTokenMiddleware = (req, res, next) => {
         const token = authHeader.split(" ")[1]
 
         const decoded = verifyToken(token)
-
-        console.log({decoded})
 
         // guardamos en el request el usuario
         req.user = decoded

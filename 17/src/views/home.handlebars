@@ -1,6 +1,21 @@
 <h1> Sistema ecommerce </h1>
 
 <h2> Funcionalidades disponibles </h2>
+
+{{#if user}}
+    <div>
+        <span>Conectado como: <strong>{{user.email}}</strong></span>
+        <form action="/user/logout" method="POST" style="display: inline;">
+            <button type="submit">Cerrar Sesión</button>
+        </form>
+    </div>
+{{else}}
+    <div>
+        <a href="/user/login">Iniciar Sesión</a>
+        <a href="/user/create">Registrarse</a>
+    </div>
+{{/if}}
+
 <ul>
     <li>Usuarios</li>
     <li>Categorias</li>
