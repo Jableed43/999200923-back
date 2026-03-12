@@ -1,0 +1,28 @@
+<h2>{{title}}</h2>
+<a href="/category/create" class="btn">Crear nueva categoría</a>
+
+{{#if categories.length}}
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each categories}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td class="actions">
+                        <a href="/category/update/{{_id}}" class="btn-edit">Editar</a>
+                        <form action="/category/{{_id}}?_method=delete" method="POST" class="inline-form">
+                            <button type="submit" class="btn-delete" onclick="return confirm('¿Eliminar categoría? Los productos asociados se quedarán sin categoría.')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{else}}
+    <p>No hay categorías registradas.</p>
+{{/if}}

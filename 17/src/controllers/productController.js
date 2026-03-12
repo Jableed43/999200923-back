@@ -1,99 +1,94 @@
-import { createProductService, deleteProductService, getAllProductService, updateProductService } from "../services/productService.js"
-import { handleError } from "../utils/errorHandler.js"
-import { getAllCategories } from "./categoryController.js"
+import * as productService from "../services/productService.js"
+import * as categoryService from "../services/categoryService.js"
 
-// Vistas
-export const createProductView = async (req, res) => {
-    try {
-        const categories = await getAllCategories()
-        console.log({categories})
-        res.render("product/createProduct", {
-            title: "Formulario de creacion de producto",
-            categories
-        })
-
-    } catch (error) {
-        res.render("product/createProduct", {
-            title: "Formulario de creacion de producto",
-            categories: [],
-            message: "Error al cargar categorias"
-        })
-    }
-}
+// --- VISTAS (GET) ---
 
 export const getAllProductView = async (req, res) => {
     try {
-        const products = await getAllProductService()
-
-        res.render("product/getAllProduct", {
-            title: "Listado de productos",
-            products
-        })
+        const products = await productService.getAllProducts()
+        res.render("product/getAllProduct", { title: "Listado de productos", products })
     } catch (error) {
-        res.render("product/getAllProduct", {
-            title: "Listado de productos",
-            products: [],
-            message: "Hubo un error en recuperar los productos"
-        })
+        req.session.message = "Error al cargar los productos"
+        res.redirect("/")
     }
 }
 
+export const createProductView = async (req, res) => {
+    try {
+        const categories = await categoryService.getAllCategories()
+        res.render("product/createProduct", { title: "Nuevo producto", categories })
+    } catch (error) {
+        req.session.message = "Error al cargar categorías"
+        res.redirect("/product")
+    }
+}
 
-// Acciones
+export const updateProductView = async (req, res) => {
+    try {
+        const { id } = req.params
+        const product = await productService.getProductById(id)
+        const categories = await categoryService.getAllCategories()
+        res.render("product/updateProduct", { title: "Editar producto", product, categories })
+    } catch (error) {
+        req.session.message = error.message || "Error al cargar producto"
+        res.redirect("/product")
+    }
+}
+
+// --- ACCIONES (POST, PATCH, DELETE) ---
+
 export const createProduct = async (req, res) => {
     try {
-        console.log(req.body)
-        if(req.body.category === "null" || req.body.category === ""){
-            req.body.category = null
-        }
+        const productData = req.body
+        // Adaptamos datos booleanos y nulos
+        productData.highlighted = !!productData.highlighted
+        if (productData.category === "" || productData.category === "null") productData.category = null
 
-        req.body.highlighted = !!req.body.highlighted
-
-        // manejamos la creacion del producto
-        await createProductService(req.body)
-        
-        req.session.message = "Producto creado exitosamente"
+        await productService.createProduct(productData)
+        req.session.message = "Producto creado con éxito"
         req.session.success = true
-
-        res.redirect("/")
-
+        res.redirect("/product")
     } catch (error) {
-            req.session.message = error.message || "Error al crear producto"
-            res.redirect("/")
-    }
-}
-
-export const getAllProduct = async (req, res) => {
-    try {
-        const products = await getAllProductService()
-        res.status(200).json(products)
-    } catch (error) {
-        handleError(error, res)
+        req.session.message = "Error al crear producto: " + error.message
+        res.redirect("/product/create")
     }
 }
 
 export const updateProduct = async (req, res) => {
     try {
-        // req.params -> Parametro de ruta, es informacion que se envia desde en endpoint para filtrar
-        // o identificar algo unico
         const { id } = req.params
         const productData = req.body
+        productData.highlighted = !!productData.highlighted
+        if (productData.category === "" || productData.category === "null") productData.category = null
 
-        const updatedProduct = await updateProductService(id, productData)
-        // Cod 201 -> Registro creado / actualizado
-        res.status(201).json(updatedProduct)
-
+        await productService.updateProduct(id, productData)
+        req.session.message = "Producto actualizado correctamente"
+        req.session.success = true
+        res.redirect("/product")
     } catch (error) {
-        handleError(error, res)
+        req.session.message = error.message || "Error al actualizar producto"
+        res.redirect("/product")
     }
 }
 
 export const deleteProduct = async (req, res) => {
     try {
-        const {id} = req.params
-        const result = await deleteProductService(id)
-        res.status(201).json(result)
+        const { id } = req.params
+        await productService.deleteProduct(id)
+        req.session.message = "Producto eliminado con éxito"
+        req.session.success = true
     } catch (error) {
-        handleError(error, res)
+        req.session.message = error.message || "Error al eliminar producto"
     }
+    res.redirect("/product")
 }
+
+// API de soporte (si se necesita por JSON)
+export const getAllProducts = async (req, res) => {
+    try {
+        const products = await productService.getAllProducts()
+        res.status(200).json(products)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}

@@ -39,9 +39,14 @@ const userSchema = new mongoose.Schema({
             },
             message: "La contraseña debe tener entre 6 y 12 caracteres, un digito numerico, una letra minuscula, una letra mayuscula"
         }
-
+    },
+    role: {
+        type: String,
+        enum: ["administrador", "vendedor", "consumidor"],
+        default: "consumidor"
     }
 }, { timestamps: true })
+
 
 // Se encuentra entre la recepcion de los datos para crear un nuevo registro
 // y el guardado del nuevo registro

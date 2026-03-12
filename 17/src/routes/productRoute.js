@@ -1,18 +1,18 @@
 import express from 'express'
-import { createProduct, createProductView, deleteProduct, getAllProduct, getAllProductView, updateProduct } from '../controllers/productController.js'
+import * as productController from '../controllers/productController.js'
+import { isAuthenticated, hasRole } from '../middlewares/authMiddleware.js'
 
 const productRoute = express.Router()
 
-// Creamos los endpoints
-productRoute.post("/", createProduct)
-// productRoute.get("/", getAllProduct)
-// Tanto put como patch se comportan igual con mongoose
-productRoute.patch("/:id", updateProduct)
-productRoute.put("/:id", updateProduct)
-productRoute.delete("/:id", deleteProduct)
+// --- VISTAS ---
+productRoute.get("/", isAuthenticated, productController.getAllProductView)
+productRoute.get("/create", isAuthenticated, hasRole(['administrador', 'vendedor']), productController.createProductView)
+productRoute.get("/update/:id", isAuthenticated, hasRole(['administrador', 'vendedor']), productController.updateProductView)
 
-// vistas
-productRoute.get("/create", createProductView)
-productRoute.get("/", getAllProductView)
+// --- ACCIONES ---
+productRoute.post("/", isAuthenticated, hasRole(['administrador', 'vendedor']), productController.createProduct)
+productRoute.patch("/:id", isAuthenticated, hasRole(['administrador', 'vendedor']), productController.updateProduct)
+productRoute.delete("/:id", isAuthenticated, hasRole(['administrador', 'vendedor']), productController.deleteProduct)
 
 export default productRoute
+

@@ -69,8 +69,10 @@ app.use((req, res, next) => {
     res.locals.user = req.session.userId ? {
         id: req.session.userId,
         email: req.session.userEmail,
+        role: req.session.userRole,
         token: req.session.token
     } : null;
+
 
     // Manejo de mensajes flash
     res.locals.message = req.session.message || null;

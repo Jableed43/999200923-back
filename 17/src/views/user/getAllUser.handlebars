@@ -1,7 +1,8 @@
-<h2>Lista de usuarios</h2>
-<a href="/user/create">Crear usuario</a>
+<h2>{{title}}</h2>
+<a href="/user/create" class="btn">Crear nuevo usuario</a>
+
 {{#if users.length}}
-    <table>
+    <table class="user-table">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -16,18 +17,17 @@
                     <td>{{name}}</td>
                     <td>{{lastName}}</td>
                     <td>{{email}}</td>
-                    <td style="display: flex;
-    gap: 10px;
-    align-items: center;"> <form action="/user/{{_id}}?_method=delete" method="post" >
-                            <button type="submit" onclick="return confirm('¿Estas seguro que quieres eliminar el usuario?')" >Eliminar</button>
-                        </form> 
+                    <td class="actions">
+                        <a href="/user/update/{{_id}}" class="btn-edit">Editar</a>
                         
-                        <a href="/user/update/{{_id}}" style="padding: 1px 6px; color: black; background-color: rgb(238, 238, 238); border: gray solid 1px; text-decoration: none; border-radius: 3px; font-size: 13.33; font-family:Arial, Helvetica, sans-serif; font-weight:lighter " >Editar</a>
-                         </td>
+                        <form action="/user/{{_id}}?_method=delete" method="POST" class="inline-form">
+                            <button type="submit" class="btn-delete" onclick="return confirm('¿Eliminar usuario?')">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             {{/each}}
         </tbody>
     </table>
 {{else}}
     <p>No hay usuarios registrados.</p>
-{{/if}}
+{{/if}}

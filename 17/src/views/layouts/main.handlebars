@@ -1,14 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{title}} - UTN Backend</title>
+    <title>{{title}} - UTN Backend</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Bienvenidos</h1>
-    <h3>{{title}}</h3>
-    {{#if message}} <div> {{message}} </div> {{/if}}
-    {{{body}}}
+    <header>
+        <h1>UTN Backend</h1>
+        <nav>
+            <a href="/">Inicio</a> | 
+            {{#if user}}
+                <a href="/product">Productos</a> | 
+                
+                {{#if (eq user.role 'vendedor')}}
+                    <a href="/category">Categorías</a> |
+                {{/if}}
+
+                {{#if (eq user.role 'administrador')}}
+                    <a href="/category">Categorías</a> |
+                    <a href="/user">Usuarios</a> |
+                {{/if}}
+
+                <span>Hola, {{user.email}} ({{user.role}})</span> | 
+                <form action="/user/logout" method="POST" style="display:inline">
+                    <button type="submit" class="btn">Salir</button>
+                </form>
+            {{else}}
+                <a href="/user/login">Login</a> |
+                <a href="/user/create">Registro</a>
+            {{/if}}
+        </nav>
+
+    </header>
+    <hr>
+    
+    <main>
+        {{#if message}} <div class="message"> {{message}} </div> {{/if}}
+        {{{body}}}
+    </main>
 </body>
-</html>
+</html>

@@ -28,8 +28,12 @@ export const updateUserView = async (req, res) => {
 }
 
 export const loginView = (req, res) => {
-    res.render("user/login", { title: "Iniciar Sesión" })
+    res.render("user/login", { 
+        title: "Iniciar Sesión",
+        layout: "simple" 
+    })
 }
+
 
 // --- ACCIONES (POST, PATCH, DELETE) ---
 
@@ -79,7 +83,9 @@ export const validateUser = async (req, res) => {
         req.session.token = result.token
         req.session.userId = result.userId
         req.session.userEmail = result.userEmail
+        req.session.userRole = result.userRole
         req.session.message = `¡Bienvenido/a ${result.userEmail}!`
+
         req.session.success = true
         
         res.redirect("/")

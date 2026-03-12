@@ -1,44 +1,34 @@
-import { checkModelExist } from "../helpers/checkExist.js"
 import Product from "../models/productModel.js"
 
-export const createProductService = async (productData) => {
-    // Deberiamos validar que el producto es unico
-    const {name} = productData
-    await checkModelExist(Product, {name}, false, 400, `Product ${name}, already exist`)
+export const getAllProducts = async () => {
+    return await Product.find().populate("category")
+}
+
+export const getProductById = async (id) => {
+    const product = await Product.findById(id).populate("category")
+    if (!product) throw { message: "Producto no encontrado", statusCode: 404 }
+    return product
+}
+
+export const createProduct = async (productData) => {
+    // Validamos que el nombre sea único si el modelo no lo maneja solo
+    const exists = await Product.findOne({ name: productData.name.toLowerCase() })
+    if (exists) throw { message: "El producto ya existe", statusCode: 400 }
 
     const newProduct = new Product(productData)
-
-    const savedProduct = await newProduct.save()
-
-    return savedProduct
+    return await newProduct.save()
 }
 
-export const getAllProductService = async () => {
-    // Traer todos los productos, es igual al "select *"
-    const products = await Product.find().populate("category")
+export const updateProduct = async (id, productData) => {
+    const product = await Product.findById(id)
+    if (!product) throw { message: "Producto no encontrado", statusCode: 404 }
 
-    return products
+    Object.assign(product, productData)
+    return await product.save()
 }
 
-export const updateProductService = async (id, productData) => {
-    await checkModelExist(Product, { _id: id }, true, 404, "Product not found")
-
-    // findOneAndUpdate tiene 3 parametros:
-    // 1. Es un identificador unico con el cual buscamos el registro
-    // 2. Es la informacion con la que vamos a editar el registro
-    // 3. Retorna el registro editado, muestra el actualizado no el anterior
-    const updateProduct = await Product.findOneAndUpdate(
-        {_id: id},
-        productData,
-        { returnDocument: 'after' }
-    )
-    return updateProduct
-}
-
-export const deleteProductService = async (id) => {
-    await checkModelExist(Product, { _id: id }, true, 404, "Product not found")
-
-    const response = await Product.findByIdAndDelete(id)
-
-    return { message: "Product deleted successfully", data: response }
-}
+export const deleteProduct = async (id) => {
+    const result = await Product.deleteOne({ _id: id })
+    if (result.deletedCount === 0) throw { message: "Producto no encontrado", statusCode: 404 }
+    return true
+}

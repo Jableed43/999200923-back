@@ -1,49 +1,47 @@
-<h2>Lista de productos</h2>
-<a href="/product/create">Crear producto</a>
-{{#if products.length}}
-<table>
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Categoria</th>
-            <th>Descripcion</th>
-            <th>Estado</th>
-            <th>Destacado</th>
-            <th>Rango de ganancia</th>
-            <th>Cantidad</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each products}}
-        <tr>
-            <td>{{name}}</td>
-            <td>{{price}}</td>
-            {{#if (eq category.name null)}} <td>Sin categoría</td> {{else}} <td>{{category.name}}</td> {{/if}}
-            <td>{{description}}</td>
-            <td>
-                    {{#if (eq status 'AVAILABLE')}}
-                        Disponible
-                    {{else if (eq status 'NOT AVAILABLE')}}
-                        No Disponible
-                    {{else if (eq status 'DISCONTINUED')}}
-                        Descontinuado
-                    {{else}}
-                        {{status}}
-                    {{/if}}
-                </td>
-            <td>
-                    {{#if (eq highlighted true)}}
-                        Si
-                    {{else}}
-                        No
-                    {{/if}}
-                </td>
-            <td>{{profitRate}}</td>
-            <td>{{quantity}}</td>
-            {{/each}}
-    </tbody>
-</table>
-{{else}}
-<p>No hay productos registrados.</p>
+<h2>{{title}}</h2>
+{{#if (or (eq user.role 'administrador') (eq user.role 'vendedor'))}}
+    <a href="/product/create" class="btn">Crear nuevo producto</a>
 {{/if}}
+
+{{#if products.length}}
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th>Stock</th>
+                {{#if (or (eq user.role 'administrador') (eq user.role 'vendedor'))}}
+                    <th>Acciones</th>
+                {{/if}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+                <tr>
+                    <td>
+                        {{name}}
+                        {{#if highlighted}}<span class="badge">Destacado</span>{{/if}}
+                    </td>
+                    <td>${{price}}</td>
+                    <td>{{#if category}}{{category.name}}{{else}}Sin categoría{{/if}}</td>
+                    <td>{{status}}</td>
+                    <td>{{quantity}}</td>
+                    
+                    {{#if (or (eq ../user.role 'administrador') (eq ../user.role 'vendedor'))}}
+                        <td class="actions">
+                            <a href="/product/update/{{_id}}" class="btn-edit">Editar</a>
+                            <form action="/product/{{_id}}?_method=delete" method="POST" class="inline-form">
+                                <button type="submit" class="btn-delete" onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
+                            </form>
+                        </td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+{{else}}
+    <p>No hay productos registrados.</p>
+{{/if}}

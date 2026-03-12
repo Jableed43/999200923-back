@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - Modo Simple</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Estilos específicos para este layout */
+        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .simple-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .back-link { display: block; margin-top: 1rem; font-size: 0.9rem; color: #666; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="simple-container">
+        <h1>{{title}}</h1>
+        <hr>
+        
+        {{#if message}} <div class="message"> {{message}} </div> {{/if}}
+        
+        {{{body}}}
+
+        <a href="/" class="back-link">← Volver al inicio</a>
+    </div>
+</body>
+</html>

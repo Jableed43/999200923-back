@@ -1,11 +1,18 @@
 import express from 'express'
-import { createCategory, deleteCategory, getAllCategories, updateCategory } from '../controllers/categoryController.js'
+import * as categoryController from '../controllers/categoryController.js'
+import { isAuthenticated, hasRole } from '../middlewares/authMiddleware.js'
 
 const categoryRoute = express.Router()
 
-categoryRoute.get("/", getAllCategories)
-categoryRoute.post("/", createCategory)
-categoryRoute.patch("/:id", updateCategory)
-categoryRoute.delete("/:id", deleteCategory)
+// --- VISTAS ---
+categoryRoute.get("/", isAuthenticated, hasRole(['administrador', 'vendedor']), categoryController.getAllCategoryView)
+categoryRoute.get("/create", isAuthenticated, hasRole(['administrador', 'vendedor']), categoryController.createCategoryView)
+categoryRoute.get("/update/:id", isAuthenticated, hasRole(['administrador', 'vendedor']), categoryController.updateCategoryView)
+
+// --- ACCIONES ---
+categoryRoute.post("/", isAuthenticated, hasRole(['administrador', 'vendedor']), categoryController.createCategory)
+categoryRoute.patch("/:id", isAuthenticated, hasRole(['administrador', 'vendedor']), categoryController.updateCategory)
+categoryRoute.delete("/:id", isAuthenticated, hasRole(['administrador', 'vendedor']), categoryController.deleteCategory)
 
 export default categoryRoute
+

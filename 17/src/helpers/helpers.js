@@ -14,4 +14,9 @@ export const registerHelpers = (Handlebars) => {
     Handlebars.registerHelper("and", function (a, b) {
         return a && b    
     })
+
+    Handlebars.registerHelper("or", function (a, b) {
+        return a || b    
+    })
 }
+

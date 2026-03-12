@@ -1,55 +1,5 @@
-<h2> Crear producto </h2>
+<h2>{{title}}</h2>
 <form action="/product" method="POST">
-
-    <div>
-        <label for="name">Nombre:</label>
-        <input type="text" id="name" name="name" required>
-    </div>
-
-    <div>
-        <label for="price">Precio:</label>
-        <input type="number" id="price" name="price" step="0.50" required>
-    </div>
-
-    <div>
-        <label for="profitRate">Rango de ganancia:</label>
-        <input type="number" id="profitRate" name="profitRate" value="1.21" required>
-    </div>
-
-    <div>
-        <label for="description">Descripcion:</label>
-        <textarea name="description" id="description" placeholder="Descripcion del producto..."></textarea>
-    </div>
-
-     <div>
-        <label for="quantity">Cantidad:</label>
-        <input type="number" id="quantity" name="quantity" value="1" required>
-    </div>
-
-    <div>
-        <label for="status">Estado:</label>
-        <select name="status" id="status">
-            <option value="AVAILABLE">Disponible</option>
-            <option value="NOT_AVAILABLE">No disponible</option>
-            <option value="DISCONTINUED">Descontinuado</option>
-        </select>
-    </div>
-
-    <div>
-        <label for="category">Categoria:</label>
-        <select name="category" id="category">
-            <option value="" selected>Sin Categoría</option>
-
-            {{#each categories}}
-                <option value="{{_id}}">{{name}}</option>
-            {{/each}}
-        </select>
-    </div>
-
-    <div>
-        <label for="highlighted">Destacado:</label>
-        <input type="checkbox" name="highlighted" id="highlighted">
-    </div>
-
+    {{> productForm }}
     <button type="submit"> Crear Producto </button>
-</form>
+</form>

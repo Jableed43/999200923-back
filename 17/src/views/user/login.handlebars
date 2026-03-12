@@ -1,15 +1,15 @@
-<h2> Crear usuario </h2>
+<h2>{{title}}</h2>
 <form action="/user/login" method="POST">
     <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" required placeholder="tu@email.com">
     </div>
 
-     <div>
+    <div>
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" required>
     </div>
 
-    <button type="submit"> Iniciar Sesión </button>
-    <a href="/user/create">Registrarse</a>
-</form>
+    <button type="submit"> Entrar </button>
+    <p>¿No tienes cuenta? <a href="/user/create">Regístrate aquí</a></p>
+</form>

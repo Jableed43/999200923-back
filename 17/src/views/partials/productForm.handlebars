@@ -1,0 +1,50 @@
+<div>
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" value="{{product.name}}" required>
+</div>
+
+<div>
+    <label for="price">Precio:</label>
+    <input type="number" id="price" name="price" value="{{product.price}}" step="0.01" required>
+</div>
+
+<div>
+    <label for="profitRate">Rango de ganancia:</label>
+    <input type="number" id="profitRate" name="profitRate" value="{{#if product.profitRate}}{{product.profitRate}}{{else}}1.21{{/if}}" required step="0.01">
+</div>
+
+<div>
+    <label for="description">Descripción:</label>
+    <textarea id="description" name="description" placeholder="Descripción del producto...">{{product.description}}</textarea>
+</div>
+
+<div>
+    <label for="quantity">Cantidad:</label>
+    <input type="number" id="quantity" name="quantity" value="{{#if product.quantity}}{{product.quantity}}{{else}}1{{/if}}" required>
+</div>
+
+<div>
+    <label for="status">Estado:</label>
+    <select name="status" id="status">
+        <option value="AVAILABLE" {{#if (eq product.status "AVAILABLE")}}selected{{/if}}>Disponible</option>
+        <option value="NOT_AVAILABLE" {{#if (eq product.status "NOT_AVAILABLE")}}selected{{/if}}>No disponible</option>
+        <option value="DISCONTINUED" {{#if (eq product.status "DISCONTINUED")}}selected{{/if}}>Descontinuado</option>
+    </select>
+</div>
+
+<div>
+    <label for="category">Categoría:</label>
+    <select name="category" id="category">
+        <option value="null">-- Ninguna --</option>
+        {{#each categories}}
+            <option value="{{_id}}" {{#if (eq _id ../product.category._id)}}selected{{/if}}>{{name}}</option>
+        {{/each}}
+    </select>
+</div>
+
+<div>
+    <label>
+        <input type="checkbox" name="highlighted" {{#if product.highlighted}}checked{{/if}}> Destacado
+    </label>
+</div>
+
