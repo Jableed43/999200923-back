@@ -9,8 +9,8 @@ const BASE_URL = 'http://localhost:3000/api';
 export const fetchApi = async (endpoint, options = {}) => {
   const url = `${BASE_URL}${endpoint}`;
   
-  // Extraemos el token del localStorage por si existe
-  const token = window.localStorage.getItem('ecommerce_token');
+  // Extraemos el token del sessionStorage por si existe
+  const token = window.sessionStorage.getItem('ecommerce_token');
 
   const defaultHeaders = {
     'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext.jsx'
-import { AuthProvider } from './context/AuthContext.jsx' // IMPORT
+import { AuthProvider } from './context/AuthProvider.jsx' // IMPORT
 import { MainLayout } from './layout/MainLayout'
 import { Home } from './pages/Home'
 import { Products } from './pages/Products'

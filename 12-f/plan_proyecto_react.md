@@ -44,7 +44,7 @@ Se crearán **Custom Hooks** que centralizarán la lógica de llamadas HTTP haci
 - `useGetCategories()`: Consulta el `GET /api/category` para armar los menús de navegación.
 
 ### 2.2 Hooks para Autenticación
-- `useLogin()`: Maneja `POST /api/user/login`. Recibe y guarda el Token en `localStorage` o Cookies.
+- `useLogin()`: Maneja `POST /api/user/login`. Recibe y guarda el Token en `sessionStorage` o Cookies.
 - `useRegisterUser()`: Para el alta llamando a `POST /api/user/`.
 
 ### 2.3 Hooks para Carrito/Compras
@@ -55,7 +55,7 @@ Se crearán **Custom Hooks** que centralizarán la lógica de llamadas HTTP haci
 - **Estructura base del Carrito**:
   - Estado: `cartItems` = Array de `{product, quantity}`.
   - Funciones: `addToCart(item)`, `removeFromCart(id)`, `updateQuantity(id, mount)`, `clearCart()`.
-- **Persistencia**: Efecto (useEffect) para guardar y leer los datos no finalizados del carrito contra `localStorage`.
+- **Persistencia**: Efecto (useEffect) para guardar y leer los datos no finalizados del carrito contra `sessionStorage`.
 
 ---
 

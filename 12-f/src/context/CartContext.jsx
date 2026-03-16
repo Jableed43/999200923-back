@@ -14,20 +14,20 @@ export const useCart = () => {
 
 // 3. Proveedor del Estado Global
 export const CartProvider = ({ children }) => {
-  // Inicializamos leyendo de localStorage si existe, o un array vacío
+  // Inicializamos leyendo de sessionStorage si existe, o un array vacío
   const [cartItems, setCartItems] = useState(() => {
     try {
-      const item = window.localStorage.getItem('ecommerce_cart');
+      const item = window.sessionStorage.getItem('ecommerce_cart');
       return item ? JSON.parse(item) : [];
     } catch (error) {
-      console.error('Error leyendo carrito del localStorage', error);
+      console.error('Error leyendo carrito del sessionStorage', error);
       return [];
     }
   });
 
-  // Guardar en localStorage cada vez que cartItems cambia (Persistencia)
+  // Guardar en sessionStorage cada vez que cartItems cambia (Persistencia)
   useEffect(() => {
-    window.localStorage.setItem('ecommerce_cart', JSON.stringify(cartItems));
+    window.sessionStorage.setItem('ecommerce_cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
   // Acción: Agregar al carrito
@@ -72,7 +72,7 @@ export const CartProvider = ({ children }) => {
   // Acción: Vaciar carrito entero (Checkout exitoso)
   const clearCart = () => {
     setCartItems([]);
-    window.localStorage.removeItem('ecommerce_cart');
+    window.sessionStorage.removeItem('ecommerce_cart');
   };
 
   // Helpers para la UI (Monto total y Cantidad de ítems)

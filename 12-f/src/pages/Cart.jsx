@@ -12,8 +12,8 @@ export const Cart = () => {
   const [checkoutError, setCheckoutError] = useState('');
 
   const handleCheckout = async () => {
-    // 1. Verificar si hay token en localStorage para saber si estam logueados
-    const token = window.localStorage.getItem('ecommerce_token');
+    // 1. Verificar si hay token en sessionStorage para saber si estam logueados
+    const token = window.sessionStorage.getItem('ecommerce_token');
     
     if (!token) {
       // Redirigir al inicio de sesion si no esta logueado
