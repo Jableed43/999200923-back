@@ -24,8 +24,6 @@ export const Login = () => {
     // Si sale bien, redirigir usando navigate()
     if(result.success){
       navigate("/carrito")
-    } else {
-      navigate("/")
     }
   };
 
