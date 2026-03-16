@@ -1,4 +1,4 @@
-import { createProductService, deleteProductService, getAllProductService, updateProductService } from "../services/productService.js"
+import { createProductService, deleteProductService, getAllProductService, updateProductService, getProductByIdService } from "../services/productService.js"
 import { handleError } from "../utils/errorHandler.js"
 
 export const createProduct = async (req, res) => {
@@ -18,10 +18,21 @@ export const createProduct = async (req, res) => {
 
 export const getAllProduct = async (req, res) => {
     try {
-        const products = await getAllProductService()
+        // Obtenemos los parametros de consulta de la URL, si existen. (ej. req.query.category)
+        const products = await getAllProductService(req.query)
         res.status(200).json(products)
     } catch (error) {
         handleError(error, res)
+    }
+}
+
+export const getProductById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await getProductByIdService(id);
+        res.status(200).json(product);
+    } catch (error) {
+        handleError(error, res);
     }
 }
 

@@ -1,28 +1,63 @@
 import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore'
 import {dbFirebase} from "../config/firebase.js"
-// id: string,
-// userId: string,
-// items: [
-// {	productId: string,
-// 	quantity: number,
-// 	price: number
-//  }
-// ],
-// totalAmount: number (precio total de la compra),
-// purchaseDate: Date,
-// status: string (enum: COMPLETED, CANCELED, PENDING)
+import Product from "../models/productModel.js"
 
 // CREATE
 export const createPurchaseService = async (purchaseData) => {
-    // validaciones
-    // Validar que los items existan, sea un array y no este vacio
+    // 1. Validaciones iniciales
     if(!purchaseData.items || !Array.isArray(purchaseData.items) || purchaseData.items.length === 0 ){
-        throw new Error("Items array is required and must not be empty")
+        const error = new Error("Items array is required and must not be empty")
+        error.statusCode = 400
+        throw error
     }
 
-    // crear un objeto con los datos de la compra
+    let totalAmount = 0;
+    const processedItems = [];
+
+    // 2. Validar stock y comprobar precios puros en MongoDB
+    for (const item of purchaseData.items) {
+        // En lugar de confiar en el Frontend, buscamos la verdad en la Base de Datos
+        const product = await Product.findById(item.productId);
+        
+        if (!product) {
+            const error = new Error(`Product with ID ${item.productId} not found`);
+            error.statusCode = 404;
+            throw error;
+        }
+
+        // Chequear stock disponible
+        if (product.quantity < item.quantity) {
+            const error = new Error(`Not enough stock for product ${product.name}. Available: ${product.quantity}`);
+            error.statusCode = 400;
+            throw error;
+        }
+
+        // Calcular precio en el servidor asumiendo formula (precio * profitRate)
+        const currentPrice = Number((product.price * product.profitRate).toFixed(2));
+        
+        totalAmount += currentPrice * item.quantity; // Sumamos al gran total
+
+        processedItems.push({
+            productId: item.productId,
+            name: product.name,           // Info auxiliar para el ticket en Firebase
+            quantity: item.quantity,
+            price: currentPrice           // Unitario final calculado en servidor
+        });
+    }
+
+    // 3. Restar stock en tiempo real en MongoDB tras la aprobación
+    for (const item of processedItems) {
+        await Product.findOneAndUpdate(
+            { _id: item.productId },
+            { $inc: { quantity: -item.quantity } } // Sustracción asíncrona
+        );
+    }
+
+    // 4. Armar ticket y guardar a la pasarela de Firebase limpio y blindado
     const purchaseDataWithTimeStamp = {
         ...purchaseData,
+        items: processedItems, // Pisamos (sobrescribimos) cualquier ítem falso del Frontend
+        totalAmount: Number(totalAmount.toFixed(2)), // Pisamos totales calculados
         purchaseDate: new Date(),
         status: "COMPLETED"
     }

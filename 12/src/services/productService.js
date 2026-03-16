@@ -13,11 +13,40 @@ export const createProductService = async (productData) => {
     return savedProduct
 }
 
-export const getAllProductService = async () => {
-    // Traer todos los productos, es igual al "select *"
-    const products = await Product.find().populate("category")
+export const getAllProductService = async (query) => {
+    let filters = {};
+
+    // 1. Filtrado por categoría exacta
+    if (query.category) {
+        filters.category = query.category;
+    }
+    
+    // 2. Busqueda parcial en texto (nombre o descripcion)
+    if (query.search) {
+        filters.$or = [
+            { name: { $regex: query.search, $options: 'i' } },
+            { description: { $regex: query.search, $options: 'i' } }
+        ];
+    }
+    
+    // 3. Traer solo destacados (para la vista de Home)
+    if (query.highlighted) {
+        filters.highlighted = query.highlighted === 'true';
+    }
+
+    // Traer todos los productos aplicando los filtros o todos si no hay ninguno
+    const products = await Product.find(filters).populate("category")
 
     return products
+}
+
+export const getProductByIdService = async (id) => {
+    // Verificamos si existe el ID previamente
+    await checkModelExist(Product, { _id: id }, true, 404, "Product not found")
+    
+    // Devolvemos el producto con su categoría anidada
+    const product = await Product.findById(id).populate("category")
+    return product
 }
 
 export const updateProductService = async (id, productData) => {

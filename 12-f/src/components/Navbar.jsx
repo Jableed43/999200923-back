@@ -1,0 +1,49 @@
+import { Link, useNavigate } from 'react-router-dom'
+import { ShoppingCart, LogIn, LogOut } from 'lucide-react'
+import { useCart } from '../context/CartContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
+
+export const Navbar = () => {
+  const { getCartCount } = useCart()
+  const { isAuthenticated, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
+  return (
+    <nav className="navbar">
+      <div className="nav-brand">
+        <Link to="/">
+          <h1>E-Commerce</h1>
+        </Link>
+      </div>
+      
+      <ul className="nav-links">
+        <li><Link to="/">Inicio</Link></li>
+        <li><Link to="/productos">Catálogo</Link></li>
+      </ul>
+
+      <div className="nav-actions">
+        {isAuthenticated ? (
+          <button onClick={handleLogout} className="action-icon logout-btn" title="Cerrar Sesión">
+            <LogOut size={24} />
+          </button>
+        ) : (
+          <Link to="/login" className="action-icon" title="Iniciar Sesión">
+            <LogIn size={24} />
+          </Link>
+        )}
+        
+        <Link to="/carrito" className="action-icon cart-icon-wrapper" title="Ir al Carrito">
+          <ShoppingCart size={24} />
+          {getCartCount() > 0 && (
+            <span className="cart-badge">{getCartCount()}</span>
+          )}
+        </Link>
+      </div>
+    </nav>
+  )
+}
