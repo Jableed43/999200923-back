@@ -14,7 +14,7 @@ export const useRegister = () => {
       setError(null)
 
       // llama al controller de createUser en express
-      const data = await fetchApi("/user", {
+      const data = await fetchApi("/user/register", {
         method: "POST",
         body: JSON.stringify(userData)
       })

@@ -15,7 +15,8 @@ export const createUserService = async (userData) => {
 }
 
 export const getUserService = async () => {
-    const users = await User.find()
+    // quitamos la password al consultar por los users
+    const users = await User.find().select("-password")
     return users
 }
 
@@ -69,7 +70,8 @@ export const validateUserService = async (userData) => {
     // tanto _id como email son datos unicos
     const payload = {
         userId: userFound._id,
-        userEmail: userFound.email
+        userEmail: userFound.email,
+        role: userFound.role
     }
 
     // Despues firmamos el token

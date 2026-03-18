@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 import { isGoodPassword } from '../utils/validators.js'
 import bcrypt from 'bcrypt'
 
+export const roleEnum = ["CUSTOMER", "SELLER", "ADMIN"]
+
 const userSchema = new mongoose.Schema({
     name:{
         type: String,
@@ -40,6 +42,18 @@ const userSchema = new mongoose.Schema({
             message: "La contraseña debe tener entre 6 y 12 caracteres, un digito numerico, una letra minuscula, una letra mayuscula"
         }
 
+    },
+    role: {
+        type: String,
+        validate: {
+            validator: function (value) {
+                // El uso de enums nos permite manejarnos con valores predefinidos desde un listado
+                return roleEnum.includes(value)
+            },
+            // props toma el valor que se le fue dado al campo status
+            message: props => `${props.value} nos es un rol valido`
+        },
+        default: roleEnum[0]
     }
 }, { timestamps: true })
 

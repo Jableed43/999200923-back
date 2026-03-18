@@ -775,8 +775,8 @@ form {
 }
 
 .role-ADMIN { background: #fee2e2; color: #b91c1c; }
-.role-VENDEDOR { background: #dcfce7; color: #15803d; }
-.role-CONSUMIDOR { background: #dbeafe; color: #1d4ed8; }
+.role-SELLER { background: #dcfce7; color: #15803d; }
+.role-CUSTOMER { background: #dbeafe; color: #1d4ed8; }
 
 .btn-add {
   background: #2563eb;
