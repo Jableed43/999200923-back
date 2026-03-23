@@ -36,12 +36,13 @@ export const createPurchaseService = async (purchaseData) => {
         const currentPrice = Number((product.price * product.profitRate).toFixed(2));
         
         totalAmount += currentPrice * item.quantity; // Sumamos al gran total
-
+        console.log(purchaseData.userId)
         processedItems.push({
             productId: item.productId,
             name: product.name,           // Info auxiliar para el ticket en Firebase
             quantity: item.quantity,
-            price: currentPrice           // Unitario final calculado en servidor
+            price: currentPrice,
+            userId: purchaseData.userId        // Unitario final calculado en servidor
         });
     }
 

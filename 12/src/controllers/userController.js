@@ -34,6 +34,9 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const {id} = req.params
+        if(req.user.userId !== id){
+            return res.status(403).json({message: "No autorizado: un administrador no puede editar usuarios y los clientes solo pueden editar sus propios datos"})
+        }
         const userData = req.body
         const updatedUser = await updateUserService(id, userData)
         res.status(201).json(updatedUser)
