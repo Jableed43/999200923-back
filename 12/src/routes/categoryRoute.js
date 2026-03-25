@@ -8,7 +8,7 @@ const categoryRoute = express.Router()
 
 categoryRoute.get("/", getAllCategories)
 categoryRoute.post("/", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), createCategory)
-categoryRoute.patch("/:id", verifyTokenMiddleware, verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), updateCategory)
-categoryRoute.delete("/:id", verifyTokenMiddleware, verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), deleteCategory)
+categoryRoute.patch("/:id", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), updateCategory)
+categoryRoute.delete("/:id", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), deleteCategory)
 
 export default categoryRoute

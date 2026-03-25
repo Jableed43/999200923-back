@@ -45,6 +45,7 @@ export const deleteUserService = async (id) => {
     return { message: "User deleted successfully", data: deletedUser }
 }
 
+// Relacionado al login
 export const validateUserService = async (userData) => {
     const {password, email} = userData
 
@@ -54,11 +55,11 @@ export const validateUserService = async (userData) => {
         throw error
     }
 
-    const userFound = await checkModelExist(User, {email}, true, 400, `User or password is incorrect`)
+    const userFound = await checkModelExist(User, {email}, true, 400, `User or password are incorrect`)
 
     //comparamos la password que nos manda el cliente y la que tenemos almacenada en la base de datos
     if(!bcrypt.compareSync(password, userFound.password)){
-        const error = new Error("User or password is incorrect")
+        const error = new Error("User or password are incorrect")
         error.statusCode = 400
         throw error  
     }
