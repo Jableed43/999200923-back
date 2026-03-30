@@ -5,7 +5,6 @@ import { connectDB } from "./src/config/db.js";
 import productRoute from "./src/routes/productRoute.js";
 import categoryRoute from "./src/routes/categoryRoute.js";
 import userRoute from "./src/routes/userRoute.js";
-import session from "express-session";
 import purchaseRoute from "./src/routes/purchaseRoute.js";
 
 const app = express();
@@ -21,14 +20,6 @@ app.use(
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
-// Paso 1 para habilitar sesion:
-app.use(
-  session({
-    secret: SECRET,
-    resave: false, // Evita que la sesion se vuelva a guardar si no hay datos
-    saveUninitialized: false, // Evita que la sesion se guarde si no esta inicializada
-  }),
-);
 
 // Si el ambiente de desarrollo es distinto de test, entonces corremos la base de datos
 // de lo contrario, si es test, no corre la base de datos. Esto es porque la db corre en memoria.

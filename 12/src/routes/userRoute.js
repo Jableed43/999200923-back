@@ -7,7 +7,8 @@ import { roleEnum } from '../models/userModel.js'
 const userRoute = express.Router()
 
 userRoute.post("/register", createUser)
-userRoute.get("/",verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[2]]), getUser)
+// userRoute.get("/",verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[2]]), getUser)
+userRoute.get("/", getUser)
 // Opcional ruta de creacion de administradores, solo para administradores
 userRoute.post("/", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[2]]), createUserAdmin);
 userRoute.patch("/:id", verifyTokenMiddleware, updateUser)

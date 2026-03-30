@@ -7,7 +7,7 @@ const BASE_URL = 'http://localhost:3000/api';
  * @param {object} options - Opciones de fetch (method, body, headers, etc)
  */
 export const fetchApi = async (endpoint, options = {}) => {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${import.meta.env.VITE_BASE_URL}${endpoint}`;
   
   // Extraemos el token del sessionStorage por si existe
   const token = window.sessionStorage.getItem('ecommerce_token');
