@@ -1,5 +1,4 @@
 // Centralización de las llamadas al servidor (Fetch wrapper)
-const BASE_URL = 'http://localhost:3000/api';
 
 /**
  * Función genérica para hacer peticiones HTTP
