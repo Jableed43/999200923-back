@@ -12,7 +12,9 @@ import swaggerSpec from "./src/config/swagger.js";
 
 const app = express();
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+if (process.env.NODE_ENV === "development") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+}
 
 // Habilitar CORS para permitir peticiones desde el frontend (Vite) de forma segura
 app.use(
