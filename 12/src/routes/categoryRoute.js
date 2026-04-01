@@ -109,6 +109,6 @@ categoryRoute.patch("/:id", verifyTokenMiddleware, verifyRoleMiddleware([roleEnu
  *       200:
  *         description: Categoría eliminada
  */
-categoryRoute.delete("/:id", deleteCategory)
+categoryRoute.delete("/:id", verifyTokenMiddleware, deleteCategory)
 
 export default categoryRoute
