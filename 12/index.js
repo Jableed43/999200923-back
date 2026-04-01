@@ -6,8 +6,13 @@ import productRoute from "./src/routes/productRoute.js";
 import categoryRoute from "./src/routes/categoryRoute.js";
 import userRoute from "./src/routes/userRoute.js";
 import purchaseRoute from "./src/routes/purchaseRoute.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./src/config/swagger.js";
+
 
 const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // Habilitar CORS para permitir peticiones desde el frontend (Vite) de forma segura
 app.use(
