@@ -31,8 +31,14 @@ export const ProductDetail = () => {
       </Link>
 
       <div className="detail-card">
-        <div className="detail-image">
-          <span>{product.name.charAt(0).toUpperCase()}</span>
+        <div className="detail-image-container">
+          {product.image ? (
+            <img src={product.image} alt={product.name} className="detail-img-main" />
+          ) : (
+            <div className="detail-image-placeholder">
+               <span>{product.name.charAt(0).toUpperCase()}</span>
+            </div>
+          )}
         </div>
         
         <div className="detail-info">

@@ -9,7 +9,7 @@ export const useUpdateUser = () => {
         try {
             const data = await fetchApi(`/user/${id}`, {
                 method: "PATCH",
-                body: JSON.stringify(userData)
+                body: userData instanceof FormData ? userData : JSON.stringify(userData)
             });
             return { success: true, data };
         } catch (err) {

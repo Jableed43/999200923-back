@@ -9,7 +9,7 @@ export const useAdminProducts = () => {
         try {
             const data = await fetchApi("/product", {
                 method: "POST",
-                body: JSON.stringify(productData)
+                body: productData instanceof FormData ? productData : JSON.stringify(productData)
             });
             return { success: true, data };
         } catch (err) {
@@ -24,7 +24,7 @@ export const useAdminProducts = () => {
         try {
             const data = await fetchApi(`/product/${id}`, {
                 method: "PATCH",
-                body: JSON.stringify(productData)
+                body: productData instanceof FormData ? productData : JSON.stringify(productData)
             });
             return { success: true, data };
         } catch (err) {

@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         id: decoded.userId,
         email: decoded.userEmail,
         role: decoded.role,
+        avatar: decoded.avatar,
       };
     } catch (error) {
       console.error("Invalid token:", error.message);

@@ -61,7 +61,14 @@ export const Navbar = () => {
 
         {isAuthenticated ? (
           <div className="user-nav-info">
-            <span className="user-email-nav">{user?.email}</span>
+             {user?.avatar && (
+               <div className="nav-avatar-wrapper">
+                 <img src={user.avatar} alt="Avatar" className="nav-avatar-img" />
+               </div>
+             )}
+             <Link to="/perfil" className="user-email-nav" title="Ver Perfil">
+               {user?.email}
+             </Link>
             <button
               onClick={handleLogout}
               className="action-icon logout-btn"

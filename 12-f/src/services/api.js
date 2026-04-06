@@ -11,9 +11,12 @@ export const fetchApi = async (endpoint, options = {}) => {
   // Extraemos el token del sessionStorage por si existe
   const token = window.sessionStorage.getItem('ecommerce_token');
 
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-  };
+  const defaultHeaders = {};
+  
+  // Si NO es un FormData, seteamos application/json por defecto
+  if (!(options.body instanceof FormData)) {
+    defaultHeaders['Content-Type'] = 'application/json';
+  }
 
   // Si tenemos token guardado, lo inyectamos siempre como Bearer
   if (token) {
