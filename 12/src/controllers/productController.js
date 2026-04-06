@@ -1,10 +1,35 @@
 import { createProductService, deleteProductService, getAllProductService, updateProductService, getProductByIdService } from "../services/productService.js"
 import { handleError } from "../utils/errorHandler.js"
+import { uploadImageToSupabase } from "../utils/supabaseStorage.js"
 
 export const createProduct = async (req, res) => {
     try {
-        // recibimos del cliente la informacion
-        const productData = req.body
+        // Aseguramos que productData nunca sea undefined antes de seguir
+        let productData = req.body || {};
+
+        console.log("--- DEBUG PRODUCT UPLOAD ---");
+        console.log("REQ.BODY:", req.body);
+        console.log("REQ.FILE:", req.file ? req.file.originalname : "Ninguno");
+
+        // VALIDACIÓN PREVIA DE SEGURIDAD
+        if (!req.body || Object.keys(req.body).length === 0) {
+            // Si llega vacio, intentamos ver si el archivo existe
+            if (!req.file) {
+                 return res.status(400).json({ message: "No se recibió información en el formulario (body vacío)" });
+            }
+        }
+
+        // Si el cliente envía un archivo (imagen), lo subimos a Supabase
+        if (req.file) {
+            const imageUrl = await uploadImageToSupabase(req.file, "imagenes");
+            productData.image = imageUrl; // Guardamos la URL en el campo 'image'
+        }
+
+        // Si el cuerpo llega vacío por algún error de red/cors/vercel
+        if (!productData || Object.keys(productData).length === 0) {
+            throw new Error("No se ha recibido información del producto en el cuerpo de la petición");
+        }
+
         // manejamos la creacion del producto
         const savedProduct = await createProductService(productData)
         // respondemos al cliente con el producto creado

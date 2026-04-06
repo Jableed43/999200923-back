@@ -1,6 +1,8 @@
 // Va a verificar si el token recibido es valido
 
+import { SECRET } from "../config/config.js"
 import { verifyToken } from "../utils/verifyToken.js"
+import jwt from 'jsonwebtoken'
 
 export const verifyTokenMiddleware = (req, res, next) => {
     try {
@@ -27,4 +29,8 @@ export const verifyTokenMiddleware = (req, res, next) => {
     } catch (error) {
         return res.status(400).json({message: "Invalid access token", error})
     }
+}
+
+export function generateToken(payload) {
+    return jwt.sign(payload, SECRET, {expiresIn: "1h"})
 }

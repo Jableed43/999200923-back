@@ -3,6 +3,7 @@ import { createProduct, deleteProduct, getAllProduct, updateProduct, getProductB
 import { verifyTokenMiddleware } from '../middlewares/verifyTokenMiddleware.js'
 import { verifyRoleMiddleware } from '../middlewares/verifyRoleMiddleware.js'
 import { roleEnum } from '../models/userModel.js'
+import upload from '../middlewares/multerMiddleware.js'
 
 const productRoute = express.Router()
 
@@ -66,7 +67,7 @@ const productRoute = express.Router()
  *       401:
  *         description: No autorizado
  */
-productRoute.post("/", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), createProduct)
+productRoute.post("/", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[1], roleEnum[2]]), upload.single('image'), createProduct)
 
 /**
  * @swagger

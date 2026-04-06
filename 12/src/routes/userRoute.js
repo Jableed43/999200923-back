@@ -3,6 +3,7 @@ import { createUser, createUserAdmin, deleteUser, getUser, updateUser, validateU
 import { verifyTokenMiddleware } from '../middlewares/verifyTokenMiddleware.js'
 import { verifyRoleMiddleware } from '../middlewares/verifyRoleMiddleware.js'
 import { roleEnum } from '../models/userModel.js'
+import upload from '../middlewares/multerMiddleware.js'
 
 const userRoute = express.Router()
 
@@ -118,7 +119,7 @@ userRoute.post("/", verifyTokenMiddleware, verifyRoleMiddleware([roleEnum[2]]), 
  *       200:
  *         description: Usuario actualizado
  */
-userRoute.patch("/:id", verifyTokenMiddleware, updateUser)
+userRoute.patch("/:id", verifyTokenMiddleware, upload.single('avatar'), updateUser)
 
 /**
  * @swagger

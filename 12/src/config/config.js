@@ -11,3 +11,5 @@ export const PROJECT_ID= process.env.PROJECT_ID
 export const STORAGE_BUCKET= process.env.STORAGE_BUCKET
 export const MESSAGING_SENDER_ID= process.env.MESSAGING_SENDER_ID
 export const APP_ID= process.env.APP_ID
+export const SUPABASE_URL = process.env.SUPABASE_URL
+export const SUPABASE_KEY = process.env.SUPABASE_KEY

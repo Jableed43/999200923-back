@@ -13,7 +13,7 @@ export const UserProfile = () => {
   const [msg, setMsg] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(user?.avatar || null);
-
+  console.log({user})
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -49,7 +49,7 @@ export const UserProfile = () => {
       <div className="profile-card">
         <div className="avatar-section">
           <div className="avatar-preview-wrapper">
-             <img src={preview || 'https://via.placeholder.com/150'} alt="Avatar" className="avatar-img" />
+             <img src={preview || 'https://picsum.photos/200'} alt="Avatar" className="avatar-img" />
           </div>
           <label htmlFor="avatar-input" className="avatar-label">Cambiar foto de perfil</label>
           <input 

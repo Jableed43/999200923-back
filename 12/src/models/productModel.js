@@ -54,7 +54,8 @@ const productSchema = new mongoose.Schema({
     highlighted: {
         type: Boolean,
         default: false
-    }
+    },
+    image: {type: String, default: null}
 
 }, { 
   timestamps: true
