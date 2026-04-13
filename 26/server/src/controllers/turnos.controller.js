@@ -81,3 +81,17 @@ export const getTurnosByProfesional = async (req, res) => {
         res.status(500).json({ error: "Error al obtener turnos del profesional" });
     }
 };
+
+export const handleReprogramar = async (req, res) => {
+  const { id } = req.params;
+  const { fecha, hora } = req.body;
+  try {
+    const actualizado = await turnosService.rescheduleTurno(id, { fecha, hora });
+    res.json({ message: "Turno reprogramado con éxito", turno: actualizado });
+  } catch (error) {
+    if (error.message === "TURNO_NOT_FOUND") return res.status(404).json({ error: "Turno no encontrado" });
+    if (error.message === "SLOT_ALREADY_BOOKED") return res.status(409).json({ error: "El nuevo horario ya está ocupado" });
+    res.status(500).json({ error: "Error al reprogramar el turno" });
+  }
+};
+

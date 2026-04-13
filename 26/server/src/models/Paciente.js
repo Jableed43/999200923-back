@@ -15,6 +15,20 @@ const pacienteSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        default: 'paciente'
+    },
     historiaClinica: [{
         fecha: {
             type: Date,

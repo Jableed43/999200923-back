@@ -18,6 +18,20 @@ const administrativoSchema = new mongoose.Schema({
     sector: {
         type: String,
         required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        default: 'administrativo'
     }
 }, {
     timestamps: true

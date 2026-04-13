@@ -77,3 +77,35 @@ button {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
+
+.mobile-menu-btn {
+  display: none;
+}
+
+/* --- RESPONSIVE NAVIGATION --- */
+@media (max-width: 992px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: block !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-info-nav {
+    display: none !important;
+  }
+  .hide-mobile {
+      display: none;
+  }
+}
+
+/* Ajustes Generales de Layout Responsive */
+@media (max-width: 600px) {
+  .glass-card {
+    padding: 15px !important;
+  }
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.5rem; }
+}

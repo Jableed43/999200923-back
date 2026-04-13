@@ -166,10 +166,6 @@ Para que el sistema sea funcional y soporte los 3 roles, necesitaremos implement
 
 
 Para la proxima clase:
-- quitar de la home el boton de "reservar turno", ya que no anda bien
-- en el dashboard del medico, ademas quiero poder leer el motivo de la consulta en las cards
-- quiero desde el dashboard medico poder acceder a la historia clinica del paciente (aun no esta desarrollada la funcionalidad de ver la historia clinica)
-- Quiero poder desde el dashboard modificar el turno del paciente, la idea es que no tenga que dar de baja el turno, sino modificarlo sin darlo de baja, para poder hacer esto, nos llevara al calendario y podremos elegir otro dia/horario
-- en la agenda de turnos, quiero poder ver los turnos solicitados en cada fecha y con un click poder acceder al detalle del turno
-- pantalla de login/registro y manejo de sesion
+
+- pantalla de login/registro y manejo de sesion, tenemos 3 roles: profesional, administrativo y paciente
 - el paciente se crea a si mismo el usuario, pero el profesional es creado por el administrativo

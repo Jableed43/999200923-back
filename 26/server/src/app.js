@@ -1,10 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import turnosRoutes from './routes/turnos.routes.js';
 import profesionalRoute from './routes/profesionalRoute.js';
 import pacienteRoute from './routes/pacienteRoute.js';
 import administrativoRoute from './routes/administrativoRoute.js';
+import authRoutes from './routes/auth.routes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -12,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Rutas Base
 app.get('/', (req, res) => {
@@ -26,5 +33,6 @@ app.use('/api/turnos', turnosRoutes);
 app.use('/api/profesionales', profesionalRoute);
 app.use('/api/pacientes', pacienteRoute);
 app.use('/api/administrativos', administrativoRoute);
+app.use('/api/auth', authRoutes);
 
 export default app;

@@ -21,3 +21,8 @@ export const updateEstadoTurno = async (turnoId, estado) => {
     const response = await api.patch(`/turnos/${turnoId}/estado`, { estado });
     return response.data;
 };
+
+export const reprogramarTurno = async (turnoId, data) => {
+    const response = await api.patch(`/turnos/${turnoId}/reprogramar`, data);
+    return response.data;
+};

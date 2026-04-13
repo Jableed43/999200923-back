@@ -106,3 +106,31 @@ export const fetchByProfesional = async (profesionalId) => {
         .populate('paciente', 'nombre apellido')
         .sort({ fecha: 1 });
 };
+
+export const rescheduleTurno = async (id, { fecha, hora }) => {
+  const turnoOriginal = await Turno.findById(id);
+  if (!turnoOriginal) throw new Error("TURNO_NOT_FOUND");
+
+  const parsedFecha = parseISO(fecha);
+
+  // Validar que el nuevo slot no esté ocupado por OTRO turno
+  const ocupado = await Turno.findOne({
+    _id: { $ne: id },
+    profesional: turnoOriginal.profesional,
+    fecha: {
+      $gte: startOfDay(parsedFecha),
+      $lte: endOfDay(parsedFecha)
+    },
+    hora,
+    estado: { $ne: 'cancelado' }
+  });
+
+  if (ocupado) throw new Error("SLOT_ALREADY_BOOKED");
+
+  turnoOriginal.fecha = parsedFecha;
+  turnoOriginal.hora = hora;
+  await turnoOriginal.save();
+  
+  return await Turno.findById(id).populate('paciente', 'nombre apellido');
+};
+

@@ -19,3 +19,7 @@ export const updateDisponibilidad = async (id, disponibilidad) => {
         { new: true }
     );
 };
+
+export const updateProfesional = async (id, data) => {
+    return await Profesional.findByIdAndUpdate(id, data, { new: true });
+};
