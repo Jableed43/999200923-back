@@ -28,6 +28,8 @@ describe('Turnos Service Unit Tests', () => {
             nombre: "Dr.",
             apellido: "Test",
             matricula: "UNIT-1",
+            email: "drtest@seprise.com",
+            password: "secret123",
             especialidad: "Test",
             disponibilidad: [
                 { dia: "Lunes", slots: ["08:00", "09:00", "10:00"], activa: true },
@@ -62,9 +64,10 @@ describe('Turnos Service Unit Tests', () => {
         expect(result.slots).toContain("10:00");
     });
 
-    test('fetchDisponibles should return empty if day is not active', async () => {
+    test('fetchDisponibles should return empty slots if day is not active', async () => {
         const result = await fetchDisponibles(profesionalId, "2026-04-14"); // Es martes (activa: false)
-        expect(result).toEqual([]);
+        expect(result.slots).toEqual([]);
+        expect(result.dia).toBe('Martes');
     });
 
     test('fetchDisponibles should show slot again if turn is cancelled', async () => {

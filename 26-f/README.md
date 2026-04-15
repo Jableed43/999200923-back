@@ -1,16 +1,79 @@
-# React + Vite
+# Sistema de Turnos - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend del proyecto de Sistema de Turnos con React y Vite.
 
-Currently, two official plugins are available:
+## Tecnologías utilizadas
+- React 19
+- Vite
+- React Router Dom
+- Axios
+- Bootstrap 5
+- Material UI
+- SweetAlert2
+- date-fns
+- react-easy-crop
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades implementadas
+- Autenticación de pacientes
+- Registro de pacientes
+- Visualización de profesionales
+- Reserva de turnos
+- Gestión de turnos para paciente y profesional
+- Protected routes con token JWT
+- Subida de imágenes de profesionales
+- Consumo de API REST
 
-## React Compiler
+## Estructura de carpetas
+- `src/`
+  - `App.jsx` - componente principal
+  - `main.jsx` - entrada de la aplicación
+  - `components/` - componentes reutilizables
+  - `pages/` - vistas principales de la aplicación
+  - `services/` - configuración de Axios y llamadas al backend
+  - `hooks/` - hooks personalizados
+  - `context/` - contexto de autenticación
+  - `assets/` - imágenes y recursos estáticos
+  - `styles/` - estilos globales y componentes
+  - `utils/` - utilidades auxiliares
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Configuración
+El frontend consume la API desde:
 
-## Expanding the ESLint configuration
+```js
+http://localhost:3000/api
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Este valor está configurado en `src/services/api.js`.
+
+## Instrucciones para descargar y correr
+1. Abrir la carpeta `26-f`.
+2. Instalar dependencias:
+
+```bash
+npm install
+```
+
+3. Iniciar el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+4. Abrir el navegador en la URL indicada por Vite, normalmente:
+
+```text
+http://localhost:5173
+```
+
+## Build y preview
+- Generar build de producción:
+
+```bash
+npm run build
+```
+
+- Probar la versión de producción localmente:
+
+```bash
+npm run preview
+```

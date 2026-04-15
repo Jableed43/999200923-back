@@ -23,34 +23,45 @@ afterAll(async () => {
 describe('Turnos Integration Tests', () => {
     let profesionalId;
     let pacienteId;
+let pacienteToken;
 
-    beforeEach(async () => {
-        await Turno.deleteMany({});
-        await Profesional.deleteMany({});
-        await Paciente.deleteMany({});
+beforeEach(async () => {
+    await Turno.deleteMany({});
+    await Profesional.deleteMany({});
+    await Paciente.deleteMany({});
 
-        // Seed data
-        const prof = await Profesional.create({
-            nombre: "Test",
-            apellido: "Medico",
-            matricula: "TEST-123",
-            especialidad: "Psicología",
-            disponibilidad: [
-                { dia: "Lunes", slots: ["09:00", "10:00"], activa: true }
-            ]
-        });
-        profesionalId = prof._id.toString();
-
-        const pac = await Paciente.create({
-            nombre: "Test",
-            apellido: "Paciente"
-        });
-        pacienteId = pac._id.toString();
+    // Seed data
+    const prof = await Profesional.create({
+        nombre: "Test",
+        apellido: "Medico",
+        matricula: "TEST-123",
+        email: "profesional@test.com",
+        password: "secret123",
+        especialidad: "Psicología",
+        disponibilidad: [
+            { dia: "Lunes", slots: ["09:00", "10:00"], activa: true }
+        ]
     });
+    profesionalId = prof._id.toString();
+
+    const regRes = await request(app)
+        .post('/api/auth/register')
+        .send({
+            nombre: "Test",
+            apellido: "Paciente",
+            email: "paciente@test.com",
+            password: "contra1234"
+        });
+
+    pacienteToken = regRes.body.token;
+    const pac = await Paciente.findOne({ email: 'paciente@test.com' });
+    pacienteId = pac._id.toString();
+});
 
     test('POST /api/turnos/reservar should create a turn', async () => {
         const res = await request(app)
             .post('/api/turnos/reservar')
+            .set('Authorization', `Bearer ${pacienteToken}`)
             .send({
                 fecha: "2026-04-13", // Es un lunes
                 hora: "09:00",
@@ -69,6 +80,7 @@ describe('Turnos Integration Tests', () => {
         // Reservar primero
         await request(app)
             .post('/api/turnos/reservar')
+            .set('Authorization', `Bearer ${pacienteToken}`)
             .send({
                 fecha: "2026-04-13",
                 hora: "09:00",
@@ -81,6 +93,7 @@ describe('Turnos Integration Tests', () => {
         // Intentar reservar el mismo
         const res = await request(app)
             .post('/api/turnos/reservar')
+            .set('Authorization', `Bearer ${pacienteToken}`)
             .send({
                 fecha: "2026-04-13",
                 hora: "09:00",
@@ -107,6 +120,7 @@ describe('Turnos Integration Tests', () => {
         // Crear turno
         const reserved = await request(app)
             .post('/api/turnos/reservar')
+            .set('Authorization', `Bearer ${pacienteToken}`)
             .send({
                 fecha: "2026-04-13",
                 hora: "09:00",
@@ -120,6 +134,7 @@ describe('Turnos Integration Tests', () => {
 
         const res = await request(app)
             .patch(`/api/turnos/${turnoId}/estado`)
+            .set('Authorization', `Bearer ${pacienteToken}`)
             .send({ estado: "cancelado" });
 
         expect(res.statusCode).toEqual(200);
