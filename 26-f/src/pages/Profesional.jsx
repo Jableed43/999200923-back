@@ -9,6 +9,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Chip, MenuItem, Select, FormControl, InputLabel, Paper, IconButton } from '@mui/material';
 import Swal from 'sweetalert2';
 import { useGetProfesionales } from '../hooks/useGetProfesionales';
+import { safeParseDate } from '../utils/dateUtils';
 
 const Profesional = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -48,7 +49,7 @@ const Profesional = () => {
   const getTurnosDelDia = (date) => {
     const targetStr = format(date, 'yyyy-MM-dd');
     return turnos.filter(t => {
-        const turnoStr = format(parseISO(t.fecha), 'yyyy-MM-dd');
+        const turnoStr = format(safeParseDate(t.fecha), 'yyyy-MM-dd');
         return turnoStr === targetStr && t.estado !== 'cancelado';
     });
   };

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import { useAuth } from '../context/AuthContext';
+import { safeParseDate } from '../utils/dateUtils';
 
 const MisTurnos = () => {
   const { user } = useAuth();
@@ -120,10 +121,10 @@ const TurnoCard = ({ turno, onCancel, isHistory = false }) => {
       <div style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
         <div style={{ textAlign: 'center', minWidth: '60px', paddingRight: '20px', borderRight: '1px solid #eee' }}>
           <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: isHistory ? 'var(--text-light)' : 'var(--primary)' }}>
-            {format(parseISO(turno.fecha), 'dd')}
+            {format(safeParseDate(turno.fecha), 'dd')}
           </div>
           <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-light)' }}>
-            {format(parseISO(turno.fecha), 'MMM', { locale: es })}
+            {format(safeParseDate(turno.fecha), 'MMM', { locale: es })}
           </div>
         </div>
 
@@ -134,7 +135,7 @@ const TurnoCard = ({ turno, onCancel, isHistory = false }) => {
            </div>
            <div style={{ display: 'flex', gap: '15px', fontSize: '0.85rem', color: 'var(--text-light)' }}>
              <span><i className="fa-regular fa-clock"></i> {turno.hora} hs</span>
-             <span><i className="fa-regular fa-calendar"></i> {format(parseISO(turno.fecha), 'eeee', { locale: es })}</span>
+             <span><i className="fa-regular fa-calendar"></i> {format(safeParseDate(turno.fecha), 'eeee', { locale: es })}</span>
            </div>
         </div>
       </div>

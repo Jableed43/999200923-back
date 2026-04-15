@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Servicio de la API Node.js
+  api:
+    image: javiernehuen/26-api:v1
+    container_name: seprise_api
+    ports:
+      - "3000:3000"
+    environment:
+      # Usamos el nombre del servicio 'database' para la conexión
+      - PORT=3000
+      - MONGODB_URI=mongodb://admin:secret@database:27017/turnos-pro?authSource=admin
+      - JWT_SECRET=seprise_secret_key_2026
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  # Servicio de Base de Datos MongoDB
+  database:
+    image: mongo:latest
+    container_name: seprise_db
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+# Red interna para comunicación entre contenedores
+networks:
+  app-network:
+    driver: bridge
+
+# Volumen persistente para MongoDB
+volumes:
+  mongo_data:
